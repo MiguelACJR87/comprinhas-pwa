@@ -1,6 +1,7 @@
 const CACHE_NAME = 'comprinhas-do-mes-cache-v1';
 const urlsToCache = [
   './comprinhas_integrado.html',
+  './manifest.json', // Adicione o manifest ao cache também
   'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
 ];
