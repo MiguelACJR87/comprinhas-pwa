@@ -132,6 +132,11 @@
                         <label for="user-nickname">Seu Apelido</label>
                         <input type="text" id="user-nickname" placeholder="Ex: Miguel">
                     </div>
+                    <!-- NOVO: Campo para nome da sala -->
+                    <div class="input-group">
+                        <label for="session-name">Nome da Sala</label>
+                        <input type="text" id="session-name" placeholder="Ex: Compras da Semana">
+                    </div>
                     <div class="form-grid">
                         <button id="create-session-btn" class="btn btn-primary" disabled>Criar Sala</button>
                         <div>
@@ -143,6 +148,8 @@
                     </div>
                 </div>
                 <div id="session-info" style="display: none;">
+                    <!-- NOVO: Exibição do nome da sala -->
+                    <p><strong>Nome da Sala:</strong> <span id="session-name-display"></span></p>
                     <p><strong>Código da Sala:</strong> <span id="session-id-display" title="Clique para copiar"></span></p>
                     <p><strong>Participantes:</strong></p>
                     <div id="participants-list"></div>
@@ -219,6 +226,7 @@
         let currentUser = { id: null, nickname: 'Anônimo' };
         let unsubscribeSession = null;
         let appData = {
+            sessionName: '',
             orcamento: 0,
             listaCompras: [],
             participantes: []
@@ -320,9 +328,19 @@
         async function handleCreateSession() {
             if (!currentUser.id) { alert("Aguarde a conexão..."); return; }
             saveNickname();
+            
+            // NOVO: Pega o nome da sala do input
+            const sessionName = document.getElementById('session-name').value.trim();
+            if (!sessionName) {
+                alert('Por favor, dê um nome para a sala.');
+                return;
+            }
+
             const sessionId = Math.random().toString(36).substring(2, 8).toUpperCase();
             const sessionDocRef = doc(db, "sessions", sessionId);
-            const initialData = { ...appData, participantes: [currentUser], createdAt: serverTimestamp() };
+            
+            // NOVO: Adiciona o nome da sala aos dados iniciais
+            const initialData = { ...appData, sessionName, participantes: [currentUser], createdAt: serverTimestamp() };
             await setDoc(sessionDocRef, initialData);
             joinSession(sessionId);
         }
@@ -438,7 +456,7 @@
         }
 
         function updateUI() {
-            const { orcamento, listaCompras, participantes } = appData;
+            const { orcamento, listaCompras, participantes, sessionName } = appData;
             
             const listaContainer = document.getElementById('lista-container');
             if (!listaCompras || listaCompras.length === 0) {
@@ -471,6 +489,7 @@
             valorRestanteAnterior = restante;
 
             if(currentSessionId) {
+                document.getElementById('session-name-display').textContent = sessionName || 'Sala sem nome';
                 const participantsContainer = document.getElementById('participants-list');
                 participantsContainer.innerHTML = (participantes || []).map(p => `<div class="participant-chip">${p.nickname}</div>`).join('');
             }
@@ -506,9 +525,8 @@
             document.getElementById('valor').focus();
         }
 
-        // --- ATUALIZADO: Funções de Exportação Corrigidas ---
         function gerarPDF() {
-            const { orcamento, listaCompras } = appData;
+            const { orcamento, listaCompras, sessionName } = appData;
             if (!listaCompras || listaCompras.length === 0) {
                 alert('Adicione produtos à lista para gerar um PDF.');
                 return;
@@ -522,7 +540,7 @@
             const conteudo = `
             <div style="font-family: 'Helvetica Neue', Arial, sans-serif; padding: 30px; max-width: 800px; margin: auto; background-color: #fff; color: ${pdfColors.text};">
                 <h1 style="color: ${pdfColors.primary}; text-align: center; margin-bottom: 25px; font-size: 26px; border-bottom: 2px solid ${pdfColors.border}; padding-bottom: 15px;">
-                    🛒 Lista de Compras ${currentSessionId ? `(Sala: ${currentSessionId})` : ''}
+                    🛒 Lista de Compras ${currentSessionId ? `(${sessionName || 'Sala Compartilhada'})` : ''}
                 </h1>
                 <div style="background: ${pdfColors.background}; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
                     <h2 style="color: ${pdfColors.text}; margin-top: 0; margin-bottom: 20px; font-size: 18px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Resumo Financeiro</h2>
@@ -552,7 +570,7 @@
         }
 
         function compartilharWhatsApp() {
-            const { orcamento, listaCompras } = appData;
+            const { orcamento, listaCompras, sessionName } = appData;
             if (!listaCompras || listaCompras.length === 0) {
                 alert('Adicione produtos à lista para compartilhar.');
                 return;
@@ -560,7 +578,7 @@
             const totalGasto = listaCompras.reduce((s, p) => s + p.total, 0);
             const restante = orcamento - totalGasto;
             
-            let mensagem = `🛒 *Lista de Compras${currentSessionId ? ` (Sala: ${currentSessionId})` : ''}*\n\n`;
+            let mensagem = `🛒 *Lista de Compras${currentSessionId ? ` (${sessionName || 'Sala Compartilhada'})` : ''}*\n\n`;
             mensagem += `💰 *Resumo Financeiro:*\n`;
             mensagem += `• Orçamento: R$ ${formatCurrency(orcamento)}\n`;
             mensagem += `• Gasto Total: R$ ${formatCurrency(totalGasto)}\n`;
