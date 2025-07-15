@@ -41,7 +41,7 @@
         #splash-screen h1 { font-size: clamp(2.5rem, 10vw, 4rem); font-weight: 700; color: var(--text-primary); letter-spacing: -2px; }
         #start-button { margin-top: 2.5rem; padding: 1rem 3rem; font-size: 1.1rem; font-weight: 600; color: var(--bg-color); background-color: var(--primary-color); border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 30px -5px var(--primary-glow); }
         
-        #app-container { display: none; max-width: 1600px; /* Aumentado para telas maiores */ margin: 0 auto; padding: 1rem; }
+        #app-container { display: none; max-width: 1600px; margin: 0 auto; padding: 1rem; }
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -55,12 +55,7 @@
         header { margin-bottom: 2rem; }
         
         .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 12px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; }
-        /* NOVO: Estilo para botões desabilitados */
-        .btn:disabled {
-            background-color: #374151;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
+        .btn:disabled { background-color: #374151; cursor: not-allowed; opacity: 0.6; }
         .btn-primary { background-color: var(--primary-color); color: var(--bg-color); }
         .btn-primary:hover:not(:disabled) { background-color: #6366f1; transform: translateY(-2px); }
         .btn-whatsapp { background-color: var(--whatsapp-color); color: white; }
@@ -87,7 +82,7 @@
         #session-id-display { user-select: all; cursor: pointer; }
         #participants-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
         .participant-chip { background: var(--secondary-btn-color); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; }
-        .form-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; } /* Mobile-first: uma coluna */
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
 
         .categorias-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
         .categoria-card { cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
@@ -95,41 +90,30 @@
         .categoria-produtos { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; margin-top: 0; }
         .produto-item { padding: 0.75rem; margin-bottom: 0.5rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px; cursor: pointer; }
         
-        .form-row { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; } /* Mobile-first: uma coluna */
+        .form-row { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
         .form-row .btn { margin-top: 1rem; }
 
-        /* --- MELHORIAS DE RESPONSIVIDADE --- */
-        
-        /* Tablets e telas pequenas (ex: iPad na vertical) */
+        /* ATUALIZADO: Estilos do Resumo Financeiro restaurados */
+        .resumo-financeiro { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .resumo-item h3 { color: var(--text-secondary); font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem; }
+        .resumo-item .valor { font-size: 1.8rem; font-weight: 700; color: var(--text-primary); }
+        .resumo-item .valor.orcamento { color: var(--primary-color); }
+        .resumo-item .valor.gasto { color: var(--accent-color); }
+        .resumo-item .valor.restante { color: var(--danger-color); }
+        .resumo-item .valor.restante.positivo { color: var(--accent-color); }
+
         @media (min-width: 640px) {
-            .form-grid {
-                grid-template-columns: 1fr 1fr; /* Duas colunas para os botões de sessão */
-            }
-            .form-row {
-                grid-template-columns: 2fr 1fr 1fr auto; /* Layout do formulário para adicionar item */
-                gap: 1rem;
-            }
-             .form-row .btn { margin-top: 0; }
+            .form-grid { grid-template-columns: 1fr 1fr; }
+            .form-row { grid-template-columns: 2fr 1fr 1fr auto; gap: 1rem; }
+            .form-row .btn { margin-top: 0; }
         }
-
-        /* Desktops e telas médias */
         @media (min-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr 1fr; /* Layout principal com duas colunas */
-            }
+            .main-content { grid-template-columns: 1fr 1fr; }
         }
-
-        /* Telas grandes (Desktops) */
         @media (min-width: 1280px) {
-            .main-content {
-                grid-template-columns: 1fr 1fr 1fr; /* Layout com três colunas para aproveitar o espaço */
-            }
-            /* Garante que a lista de compras ocupe um espaço maior */
-            .main-content > section:last-child {
-                grid-column: span 2 / span 2;
-            }
+            .main-content { grid-template-columns: 1fr 1fr 1fr; }
+            .main-content > section:last-child { grid-column: span 2 / span 2; }
         }
-
     </style>
 </head>
 <body>
@@ -150,7 +134,6 @@
                         <input type="text" id="user-nickname" placeholder="Ex: Miguel">
                     </div>
                     <div class="form-grid">
-                        <!-- ATUALIZADO: Botões começam desabilitados -->
                         <button id="create-session-btn" class="btn btn-primary" disabled>Criar Sala</button>
                         <div>
                             <div class="input-group" style="margin-bottom: 1rem;">
@@ -177,10 +160,20 @@
                         <label for="orcamento">Orçamento (R$)</label>
                         <input type="number" id="orcamento" placeholder="Ex: 500" step="0.01" min="0">
                     </div>
-                     <div class="resumo-financeiro" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
-                        <div class="resumo-item"><h3>Orçamento</h3><div class="valor orcamento" id="valor-orcamento">R$ 0,00</div></div>
-                        <div class="resumo-item"><h3>Gasto</h3><div class="valor gasto" id="valor-gasto">R$ 0,00</div></div>
-                        <div class="resumo-item"><h3>Restante</h3><div class="valor restante" id="valor-restante">R$ 0,00</div></div>
+                     <!-- ATUALIZADO: HTML do Resumo Financeiro restaurado -->
+                     <div class="resumo-financeiro">
+                        <div class="resumo-item">
+                            <h3>Orçamento</h3>
+                            <div class="valor orcamento" id="valor-orcamento">R$ 0,00</div>
+                        </div>
+                        <div class="resumo-item">
+                            <h3>Gasto</h3>
+                            <div class="valor gasto" id="valor-gasto">R$ 0,00</div>
+                        </div>
+                        <div class="resumo-item">
+                            <h3>Restante</h3>
+                            <div class="valor restante" id="valor-restante">R$ 0,00</div>
+                        </div>
                     </div>
                     <div class="header-buttons" style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
                         <button id="pdf-btn" class="btn btn-primary">📄 PDF</button>
@@ -218,7 +211,7 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, arrayUnion, arrayRemove, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
@@ -248,19 +241,17 @@
 
         async function initializeFirebase() {
             try {
-                // ATUALIZADO: Cole sua configuração do Firebase aqui se não estiver usando o ambiente do Canvas
                 const firebaseConfig = {
-                  // Substitua pelo seu objeto de configuração do Firebase
-                  apiKey: "AIza...",
-                  authDomain: "seu-projeto.firebaseapp.com",
-                  // ...etc
+                  apiKey: "AIzaSyDUi_YD8sQ4DnqETjJwydo__cs_ymQqG6A",
+                  authDomain: "comprinhas-pwa-app.firebaseapp.com",
+                  projectId: "comprinhas-pwa-app",
+                  storageBucket: "comprinhas-pwa-app.appspot.com",
+                  messagingSenderId: "190566692232",
+                  appId: "1:190566692232:web:76c4ed086f8f3f5300f63d"
                 };
 
-                if (!firebaseConfig.apiKey || firebaseConfig.apiKey === "AIza...") {
-                    console.warn("Configuração do Firebase está faltando ou é um placeholder.");
-                    // Opcional: Desabilitar a funcionalidade online se a config não estiver presente
-                    document.getElementById('create-session-btn').textContent = "Offline";
-                    document.getElementById('join-session-btn').textContent = "Offline";
+                if (!firebaseConfig.apiKey) {
+                    console.warn("Configuração do Firebase está faltando.");
                     return;
                 }
 
@@ -271,14 +262,10 @@
 
                 onAuthStateChanged(auth, user => {
                     if (user) {
-                        console.log("Usuário autenticado:", user.uid);
                         currentUser.id = user.uid;
-                        // ATUALIZADO: Habilita os botões após a autenticação
                         document.getElementById('create-session-btn').disabled = false;
                         document.getElementById('join-session-btn').disabled = false;
                     } else {
-                        console.log("Usuário não está autenticado.");
-                        // Mantém os botões desabilitados
                         document.getElementById('create-session-btn').disabled = true;
                         document.getElementById('join-session-btn').disabled = true;
                     }
@@ -288,27 +275,23 @@
 
             } catch (error) {
                 console.error("Erro ao inicializar o Firebase:", error);
-                alert("Não foi possível conectar ao servidor. A funcionalidade online está desativada.");
+                alert("Não foi possível conectar ao servidor.");
             }
         }
 
         function setupEventListeners() {
-            // Session
             document.getElementById('create-session-btn').addEventListener('click', handleCreateSession);
             document.getElementById('join-session-btn').addEventListener('click', handleJoinSession);
             document.getElementById('leave-session-btn').addEventListener('click', handleLeaveSession);
             document.getElementById('session-id-display').addEventListener('click', () => navigator.clipboard.writeText(currentSessionId));
             document.getElementById('user-nickname').addEventListener('input', saveNickname);
-            // App
             document.getElementById('orcamento').addEventListener('change', handleOrcamentoChange);
             document.getElementById('adicionar-btn').addEventListener('click', handleAdicionarProduto);
             document.getElementById('limpar-lista-btn').addEventListener('click', handleLimparLista);
-            // Exports
             document.getElementById('pdf-btn').addEventListener('click', gerarPDF);
             document.getElementById('whatsapp-btn').addEventListener('click', compartilharWhatsApp);
         }
 
-        // --- LOCAL DATA & NICKNAME ---
         function loadLocalData() {
             const savedNickname = localStorage.getItem('userNickname');
             if (savedNickname) {
@@ -316,7 +299,7 @@
                 document.getElementById('user-nickname').value = savedNickname;
             }
             const savedData = localStorage.getItem('appData');
-            if (savedData) {
+            if (savedData && !currentSessionId) {
                 appData = JSON.parse(savedData);
                 updateUI();
             }
@@ -336,12 +319,11 @@
             }
         }
 
-        // --- SESSION MANAGEMENT ---
         async function handleCreateSession() {
             if (!currentUser.id) { alert("Aguarde a conexão..."); return; }
             saveNickname();
             const sessionId = Math.random().toString(36).substring(2, 8).toUpperCase();
-            const sessionDocRef = doc(db, "sessions", sessionId); // Caminho simplificado
+            const sessionDocRef = doc(db, "sessions", sessionId);
             const initialData = { ...appData, participantes: [currentUser], createdAt: serverTimestamp() };
             await setDoc(sessionDocRef, initialData);
             joinSession(sessionId);
@@ -353,7 +335,7 @@
             const sessionId = document.getElementById('join-session-input').value.trim();
             if (!sessionId) { alert("Insira o código da sala."); return; }
 
-            const sessionDocRef = doc(db, "sessions", sessionId); // Caminho simplificado
+            const sessionDocRef = doc(db, "sessions", sessionId);
             const sessionDoc = await getDoc(sessionDocRef);
             if (!sessionDoc.exists()) { alert("Sala não encontrada."); return; }
             if ((sessionDoc.data().participantes || []).length >= 4) { alert("Sala cheia."); return; }
@@ -364,13 +346,13 @@
 
         function joinSession(sessionId) {
             currentSessionId = sessionId;
-            localStorage.removeItem('appData'); // Clear local data when joining a session
+            localStorage.removeItem('appData');
             document.getElementById('session-setup').style.display = 'none';
             document.getElementById('session-info').style.display = 'block';
             document.getElementById('session-id-display').textContent = sessionId;
 
             if (unsubscribeSession) unsubscribeSession();
-            const sessionDocRef = doc(db, "sessions", sessionId); // Caminho simplificado
+            const sessionDocRef = doc(db, "sessions", sessionId);
             unsubscribeSession = onSnapshot(sessionDocRef, (doc) => {
                 if (doc.exists()) {
                     appData = doc.data();
@@ -384,10 +366,10 @@
         
         async function handleLeaveSession() {
             if (!currentSessionId) return;
-            const sessionDocRef = doc(db, "sessions", currentSessionId); // Caminho simplificado
+            const sessionDocRef = doc(db, "sessions", currentSessionId);
             try {
                 await updateDoc(sessionDocRef, { participantes: arrayRemove(currentUser) });
-            } catch(e) { /* Ignore error if doc is gone */ }
+            } catch(e) { /* Ignore */ }
 
             if (unsubscribeSession) unsubscribeSession();
             unsubscribeSession = null;
@@ -396,10 +378,9 @@
             document.getElementById('session-setup').style.display = 'block';
             document.getElementById('session-info').style.display = 'none';
             appData = { orcamento: 0, listaCompras: [], participantes: [] };
-            loadLocalData(); // Reload local data after leaving
+            loadLocalData();
         }
 
-        // --- CORE LOGIC HANDLERS ---
         function handleAdicionarProduto() {
             const nome = document.getElementById('nome-produto').value.trim();
             const quantidade = parseInt(document.getElementById('quantidade').value) || 1;
@@ -458,11 +439,9 @@
             }
         }
 
-        // --- UI & NOTIFICATION ---
         function updateUI() {
             const { orcamento, listaCompras, participantes } = appData;
             
-            // Lista
             const listaContainer = document.getElementById('lista-container');
             if (!listaCompras || listaCompras.length === 0) {
                 listaContainer.innerHTML = `<div class="lista-vazia"><div class="icon">🛒</div><p>Sua lista está vazia</p></div>`;
@@ -478,22 +457,22 @@
                     </div>`).join('');
             }
 
-            // Resumo
             document.getElementById('orcamento').value = orcamento;
             const totalGasto = (listaCompras || []).reduce((sum, p) => sum + p.total, 0);
             const restante = orcamento - totalGasto;
             document.getElementById('valor-orcamento').textContent = `R$ ${orcamento.toFixed(2)}`;
             document.getElementById('valor-gasto').textContent = `R$ ${totalGasto.toFixed(2)}`;
-            document.getElementById('valor-restante').textContent = `R$ ${restante.toFixed(2)}`;
+            const restanteElement = document.getElementById('valor-restante');
+            restanteElement.textContent = `R$ ${restante.toFixed(2)}`;
+            // ATUALIZADO: Lógica de classe para a cor do valor restante
+            restanteElement.className = `valor restante ${restante >= 0 ? 'positivo' : ''}`;
 
-            // Alerta
             const limiteAlerta = orcamento * 0.10;
             if (orcamento > 0 && valorRestanteAnterior > limiteAlerta && restante <= limiteAlerta) {
                 showNotification(`Atenção, o seu saldo está baixo: R$ ${restante.toFixed(2)}`);
             }
             valorRestanteAnterior = restante;
 
-            // Participantes
             if(currentSessionId) {
                 const participantsContainer = document.getElementById('participants-list');
                 participantsContainer.innerHTML = (participantes || []).map(p => `<div class="participant-chip">${p.nickname}</div>`).join('');
@@ -509,14 +488,13 @@
             setTimeout(() => banner.style.display = 'none', 5000);
         }
 
-        // --- CATEGORIES & EXPORTS ---
         const categorias = { 'Cereais': ['Arroz', 'Feijão'], 'Laticínios': ['Leite', 'Queijo'], 'Proteína': ['Frango', 'Ovos'], 'Hortifrúti': ['Banana', 'Tomate'], 'Padaria': ['Pão de Forma', 'Biscoito'], 'Outros': ['Açúcar', 'Sal', 'Óleo']};
         function populateCategories() {
             const container = document.getElementById('categorias-container');
             container.innerHTML = Object.entries(categorias).map(([cat, prods]) => `
-                <div class="categoria-card card">
+                <div class="categoria-card card" onclick="this.classList.toggle('expandida')">
                     <div class="categoria-header">${cat}</div>
-                    <div class="categoria-produtos">${prods.map(p => `<div class="produto-item" onclick="window.app.selecionarProduto('${p}')">${p}</div>`).join('')}</div>
+                    <div class="categoria-produtos">${prods.map(p => `<div class="produto-item" onclick="event.stopPropagation(); window.app.selecionarProduto('${p}')">${p}</div>`).join('')}</div>
                 </div>
             `).join('');
         }
@@ -531,7 +509,7 @@
             if (listaCompras.length === 0) { alert('Adicione produtos à lista.'); return; }
             const totalGasto = listaCompras.reduce((s, p) => s + p.total, 0);
             const restante = orcamento - totalGasto;
-            const conteudo = `...`; // Seu código de geração de PDF aqui, usando as variáveis orcamento, listaCompras, etc.
+            // Adapte seu código de geração de PDF aqui
             alert("Funcionalidade de PDF a ser implementada com os dados atuais.");
         }
         function compartilharWhatsApp() {
@@ -539,7 +517,8 @@
             if (listaCompras.length === 0) { alert('Adicione produtos à lista.'); return; }
             const totalGasto = listaCompras.reduce((s, p) => s + p.total, 0);
             const restante = orcamento - totalGasto;
-            let mensagem = `🛒 *Lista de Compras${currentSessionId ? ` (Sala: ${currentSessionId})` : ''}*\n\n...`; // Seu código de mensagem aqui
+            // Adapte sua mensagem do WhatsApp aqui
+            let mensagem = `🛒 *Lista de Compras${currentSessionId ? ` (Sala: ${currentSessionId})` : ''}*\n\n...`;
             const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
         }
