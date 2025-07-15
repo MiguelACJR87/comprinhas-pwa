@@ -93,7 +93,6 @@
         .form-row { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
         .form-row .btn { margin-top: 1rem; }
 
-        /* ATUALIZADO: Estilos do Resumo Financeiro restaurados */
         .resumo-financeiro { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
         .resumo-item h3 { color: var(--text-secondary); font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem; }
         .resumo-item .valor { font-size: 1.8rem; font-weight: 700; color: var(--text-primary); }
@@ -160,7 +159,6 @@
                         <label for="orcamento">Orçamento (R$)</label>
                         <input type="number" id="orcamento" placeholder="Ex: 500" step="0.01" min="0">
                     </div>
-                     <!-- ATUALIZADO: HTML do Resumo Financeiro restaurado -->
                      <div class="resumo-financeiro">
                         <div class="resumo-item">
                             <h3>Orçamento</h3>
@@ -450,9 +448,9 @@
                     <div class="item-lista">
                         <div class="item-info">
                             <div class="item-nome">${p.nome}</div>
-                            <div class="item-detalhes">Qtd: ${p.quantidade} | ${currentSessionId ? `Add por: ${p.addedBy}` : `Valor: R$ ${p.valor.toFixed(2)}`}</div>
+                            <div class="item-detalhes">Qtd: ${p.quantidade} | ${currentSessionId ? `Add por: ${p.addedBy}` : `Valor: R$ ${formatCurrency(p.valor)}`}</div>
                         </div>
-                        <div class="item-valor">R$ ${p.total.toFixed(2)}</div>
+                        <div class="item-valor">R$ ${formatCurrency(p.total)}</div>
                         <button class="btn-remover" onclick="window.app.removerProduto(${p.id})">🗑️</button>
                     </div>`).join('');
             }
@@ -460,16 +458,15 @@
             document.getElementById('orcamento').value = orcamento;
             const totalGasto = (listaCompras || []).reduce((sum, p) => sum + p.total, 0);
             const restante = orcamento - totalGasto;
-            document.getElementById('valor-orcamento').textContent = `R$ ${orcamento.toFixed(2)}`;
-            document.getElementById('valor-gasto').textContent = `R$ ${totalGasto.toFixed(2)}`;
+            document.getElementById('valor-orcamento').textContent = `R$ ${formatCurrency(orcamento)}`;
+            document.getElementById('valor-gasto').textContent = `R$ ${formatCurrency(totalGasto)}`;
             const restanteElement = document.getElementById('valor-restante');
-            restanteElement.textContent = `R$ ${restante.toFixed(2)}`;
-            // ATUALIZADO: Lógica de classe para a cor do valor restante
+            restanteElement.textContent = `R$ ${formatCurrency(restante)}`;
             restanteElement.className = `valor restante ${restante >= 0 ? 'positivo' : ''}`;
 
             const limiteAlerta = orcamento * 0.10;
             if (orcamento > 0 && valorRestanteAnterior > limiteAlerta && restante <= limiteAlerta) {
-                showNotification(`Atenção, o seu saldo está baixo: R$ ${restante.toFixed(2)}`);
+                showNotification(`Atenção, o seu saldo está baixo: R$ ${formatCurrency(restante)}`);
             }
             valorRestanteAnterior = restante;
 
@@ -486,6 +483,11 @@
             document.getElementById('app-container').classList.add('shake-animation');
             setTimeout(() => document.getElementById('app-container').classList.remove('shake-animation'), 600);
             setTimeout(() => banner.style.display = 'none', 5000);
+        }
+        
+        function formatCurrency(value) {
+            const numberValue = Number(value) || 0;
+            return numberValue.toFixed(2).replace('.', ',');
         }
 
         const categorias = { 'Cereais': ['Arroz', 'Feijão'], 'Laticínios': ['Leite', 'Queijo'], 'Proteína': ['Frango', 'Ovos'], 'Hortifrúti': ['Banana', 'Tomate'], 'Padaria': ['Pão de Forma', 'Biscoito'], 'Outros': ['Açúcar', 'Sal', 'Óleo']};
@@ -504,21 +506,73 @@
             document.getElementById('valor').focus();
         }
 
+        // --- ATUALIZADO: Funções de Exportação Corrigidas ---
         function gerarPDF() {
             const { orcamento, listaCompras } = appData;
-            if (listaCompras.length === 0) { alert('Adicione produtos à lista.'); return; }
-            const totalGasto = listaCompras.reduce((s, p) => s + p.total, 0);
+            if (!listaCompras || listaCompras.length === 0) {
+                alert('Adicione produtos à lista para gerar um PDF.');
+                return;
+            }
+
+            const totalGasto = listaCompras.reduce((sum, produto) => sum + produto.total, 0);
             const restante = orcamento - totalGasto;
-            // Adapte seu código de geração de PDF aqui
-            alert("Funcionalidade de PDF a ser implementada com os dados atuais.");
+            const pdfColors = { primary: '#4A90E2', accent: '#50E3C2', danger: '#E94B3C', text: '#4A4A4A', secondaryText: '#9B9B9B', background: '#F9F9F9', border: '#EAEAEA', headerBg: '#4A4A4A', headerText: '#FFFFFF' };
+            const restanteCor = restante >= 0 ? pdfColors.accent : pdfColors.danger;
+
+            const conteudo = `
+            <div style="font-family: 'Helvetica Neue', Arial, sans-serif; padding: 30px; max-width: 800px; margin: auto; background-color: #fff; color: ${pdfColors.text};">
+                <h1 style="color: ${pdfColors.primary}; text-align: center; margin-bottom: 25px; font-size: 26px; border-bottom: 2px solid ${pdfColors.border}; padding-bottom: 15px;">
+                    🛒 Lista de Compras ${currentSessionId ? `(Sala: ${currentSessionId})` : ''}
+                </h1>
+                <div style="background: ${pdfColors.background}; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                    <h2 style="color: ${pdfColors.text}; margin-top: 0; margin-bottom: 20px; font-size: 18px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Resumo Financeiro</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: center;">
+                        <div><p style="margin: 0; font-size: 13px; color: ${pdfColors.secondaryText};">Orçamento</p><p style="margin: 5px 0 0; font-size: 20px; font-weight: bold; color: ${pdfColors.primary};">R$ ${formatCurrency(orcamento)}</p></div>
+                        <div><p style="margin: 0; font-size: 13px; color: ${pdfColors.secondaryText};">Gasto</p><p style="margin: 5px 0 0; font-size: 20px; font-weight: bold; color: ${pdfColors.text};">R$ ${formatCurrency(totalGasto)}</p></div>
+                        <div><p style="margin: 0; font-size: 13px; color: ${pdfColors.secondaryText};">Restante</p><p style="margin: 5px 0 0; font-size: 20px; font-weight: bold; color: ${restanteCor};">R$ ${formatCurrency(restante)}</p></div>
+                    </div>
+                </div>
+                <h2 style="color: ${pdfColors.text}; margin-bottom: 15px; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">Itens da Lista</h2>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead><tr style="background: ${pdfColors.headerBg}; color: ${pdfColors.headerText};"><th style="padding: 12px 15px; text-align: left;">Produto</th><th style="padding: 12px 15px; text-align: center;">Qtd</th><th style="padding: 12px 15px; text-align: right;">Total</th></tr></thead>
+                    <tbody>
+                        ${listaCompras.map((produto, index) => `
+                            <tr style="background-color: ${index % 2 === 0 ? '#fff' : pdfColors.background}; border-bottom: 1px solid ${pdfColors.border};">
+                                <td style="padding: 12px 15px;">${produto.nome} ${currentSessionId ? `(por ${produto.addedBy})` : ''}</td>
+                                <td style="padding: 12px 15px; text-align: center;">${produto.quantidade}</td>
+                                <td style="padding: 12px 15px; text-align: right; font-weight: 600;">R$ ${formatCurrency(produto.total)}</td>
+                            </tr>`).join('')}
+                    </tbody>
+                    <tfoot><tr style="font-weight: bold; font-size: 16px;"><td colspan="2" style="padding: 15px; text-align: right; border-top: 2px solid ${pdfColors.text};">TOTAL GERAL:</td><td style="padding: 15px; text-align: right; color: ${pdfColors.text}; border-top: 2px solid ${pdfColors.text};">R$ ${formatCurrency(totalGasto)}</td></tr></tfoot>
+                </table>
+            </div>`;
+            
+            const opt = { margin: [0.5, 0.5, 0.5, 0.5], filename: `lista-compras.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
+            html2pdf().set(opt).from(conteudo).save();
         }
+
         function compartilharWhatsApp() {
             const { orcamento, listaCompras } = appData;
-            if (listaCompras.length === 0) { alert('Adicione produtos à lista.'); return; }
+            if (!listaCompras || listaCompras.length === 0) {
+                alert('Adicione produtos à lista para compartilhar.');
+                return;
+            }
             const totalGasto = listaCompras.reduce((s, p) => s + p.total, 0);
             const restante = orcamento - totalGasto;
-            // Adapte sua mensagem do WhatsApp aqui
-            let mensagem = `🛒 *Lista de Compras${currentSessionId ? ` (Sala: ${currentSessionId})` : ''}*\n\n...`;
+            
+            let mensagem = `🛒 *Lista de Compras${currentSessionId ? ` (Sala: ${currentSessionId})` : ''}*\n\n`;
+            mensagem += `💰 *Resumo Financeiro:*\n`;
+            mensagem += `• Orçamento: R$ ${formatCurrency(orcamento)}\n`;
+            mensagem += `• Gasto Total: R$ ${formatCurrency(totalGasto)}\n`;
+            mensagem += `• Restante: R$ ${formatCurrency(restante)}\n\n`;
+            mensagem += `📝 *Produtos:*\n`;
+            
+            listaCompras.forEach(produto => {
+                mensagem += `• ${produto.nome} (${produto.quantidade}x) - R$ ${formatCurrency(produto.total)}\n`;
+            });
+            
+            mensagem += `\n*Total Geral: R$ ${formatCurrency(totalGasto)}*`;
+            
             const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
         }
