@@ -23,9 +23,9 @@
     <style>
         :root {
             --bg-color: #030712; --surface-color: rgba(17, 24, 39, 0.75); --border-color: rgba(255, 255, 255, 0.1);
-            --primary-color: #818cf8; --primary-glow: rgba(129, 140, 248, 0.2); --accent-color: #34d399;
-            --danger-color: #fb7185; --text-primary: #f9fafb; --text-secondary: #9ca3af; --font-family: 'Inter', sans-serif;
-            --whatsapp-color: #25d366; --secondary-btn-color: #4b5563; --compare-color: #f59e0b;
+            --primary-color: #818cf8; --primary-hover: #6366f1; --primary-glow: rgba(129, 140, 248, 0.2); 
+            --accent-color: #34d399; --danger-color: #fb7185; --text-primary: #f9fafb; --text-secondary: #9ca3af; 
+            --font-family: 'Inter', sans-serif; --whatsapp-color: #25d366; --secondary-btn-color: #4b5563; --compare-color: #f59e0b;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
         html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -35,7 +35,6 @@
             background-image: radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.1) 0px, transparent 50%), radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 0.1) 0px, transparent 50%), radial-gradient(at 52% 99%, hsla(355, 98%, 71%, 0.1) 0px, transparent 50%);
             background-size: 200% 200%; animation: background-pan 15s ease-in-out infinite;
         }
-        .icon { width: 1.25em; height: 1.25em; vertical-align: -0.2em; }
         
         #splash-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center; padding: 1rem; position: relative; z-index: 10; }
         #splash-screen h1 { font-size: clamp(2.5rem, 10vw, 4rem); font-weight: 700; color: var(--text-primary); letter-spacing: -2px; }
@@ -50,48 +49,71 @@
         
         .notification-banner { display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 600px; background-color: var(--danger-color); color: white; text-align: center; padding: 1rem; border-radius: 50px; z-index: 2000; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.25); animation: fadeIn 0.5s ease-out; }
         
-        .card { background: var(--surface-color); padding: 1.5rem; border-radius: 24px; border: 1px solid var(--border-color); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); }
-        .card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
+        .card { background: var(--surface-color); padding: 1.5rem; border-radius: 28px; border: 1px solid var(--border-color); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); }
+        .card h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
         header { margin-bottom: 2rem; }
         
-        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 12px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+        /* ATUALIZAÇÃO DE DESIGN: Botões */
+        .btn {
+            padding: 0.8rem 1.6rem;
+            border: none;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(0);
+        }
+        .btn:active:not(:disabled) {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
         .btn:disabled { background-color: #374151; cursor: not-allowed; opacity: 0.6; }
-        .btn-primary { background-color: var(--primary-color); color: var(--bg-color); }
-        .btn-primary:hover:not(:disabled) { background-color: #6366f1; transform: translateY(-2px); }
+        .btn-primary { background: linear-gradient(45deg, var(--primary-color), var(--primary-hover)); color: white; border: 1px solid rgba(255, 255, 255, 0.1); }
         .btn-whatsapp { background-color: var(--whatsapp-color); color: white; }
         .btn-secondary { background-color: var(--secondary-btn-color); color: var(--text-primary); }
         .btn-compare { background-color: var(--compare-color); color: var(--bg-color); }
         .btn-danger { background-color: var(--danger-color); color: white; }
-        
+        .btn-icon { padding: 0.8rem; } /* Para botões que só têm ícone */
+
         .input-group { margin-bottom: 1.5rem; }
         .input-group label { display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-weight: 500; font-size: 0.9rem; }
-        .input-group input, .input-group select { width: 100%; padding: 0.875rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 1rem; transition: all 0.3s ease; }
+        .input-group input { width: 100%; padding: 0.875rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 14px; color: var(--text-primary); font-size: 1rem; transition: all 0.3s ease; }
+        .input-group input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 4px var(--primary-glow); }
         
         .main-content { display: grid; grid-template-columns: 1fr; gap: 2rem; }
         
-        .item-lista { display: flex; justify-content: space-between; align-items: center; padding: 1rem; margin-bottom: 0.75rem; background: rgba(255, 255, 255, 0.03); border-radius: 12px; border: 1px solid var(--border-color); }
-        .item-info { flex: 1; }
+        .item-lista { display: flex; align-items: center; padding: 1rem; margin-bottom: 0.75rem; background: rgba(255, 255, 255, 0.03); border-radius: 16px; border: 1px solid transparent; transition: all 0.3s ease; }
+        .item-lista:hover { border-color: var(--border-color); background: rgba(255, 255, 255, 0.05); }
+        .item-info { flex-grow: 1; }
         .item-nome { font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
         .item-detalhes { font-size: 0.85rem; color: var(--text-secondary); }
-        .item-valor { font-weight: 700; color: var(--accent-color); font-size: 1.1rem; margin-right: 1rem; }
-        .btn-remover { background: none; border: none; color: var(--danger-color); cursor: pointer; padding: 0.5rem; border-radius: 8px; }
+        .item-valor { font-weight: 700; color: var(--accent-color); font-size: 1.1rem; margin-left: 1rem; }
+        .btn-remover { background: none; border: none; color: var(--danger-color); cursor: pointer; padding: 0.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .btn-remover:hover { background: rgba(251, 113, 133, 0.1); }
         
-        #session-info { margin-top: 1.5rem; padding: 1rem; background: rgba(129, 140, 248, 0.1); border-radius: 12px; border: 1px solid var(--primary-color); }
-        #session-info p { margin-bottom: 0.5rem; }
+        #session-info { margin-top: 1.5rem; padding: 1.5rem; background: rgba(129, 140, 248, 0.1); border-radius: 20px; border: 1px solid var(--primary-color); }
+        #session-info p { margin-bottom: 0.75rem; }
         #session-info strong { color: var(--primary-color); }
-        #session-id-display { user-select: all; cursor: pointer; }
+        #session-id-display { user-select: all; cursor: pointer; font-weight: bold; }
         #participants-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
         .participant-chip { background: var(--secondary-btn-color); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; }
         .form-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
 
-        .categorias-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .categorias-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
         .categoria-card { cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
         .categoria-card.expandida .categoria-produtos { max-height: 500px; margin-top: 1rem; }
         .categoria-produtos { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; margin-top: 0; }
         .produto-item { padding: 0.75rem; margin-bottom: 0.5rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px; cursor: pointer; }
         
         .form-row { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
-        .form-row .btn { margin-top: 1rem; }
+        .form-row .btn { margin-top: 1rem; width: 100%; }
 
         .resumo-financeiro { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
         .resumo-item h3 { color: var(--text-secondary); font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem; }
@@ -104,14 +126,14 @@
         @media (min-width: 640px) {
             .form-grid { grid-template-columns: 1fr 1fr; }
             .form-row { grid-template-columns: 2fr 1fr 1fr auto; gap: 1rem; }
-            .form-row .btn { margin-top: 0; }
+            .form-row .btn { margin-top: 0; width: auto; }
         }
         @media (min-width: 1024px) {
             .main-content { grid-template-columns: 1fr 1fr; }
         }
         @media (min-width: 1280px) {
             .main-content { grid-template-columns: 1fr 1fr 1fr; }
-            .main-content > section:last-child { grid-column: span 2 / span 2; }
+            .main-content > .card:last-of-type { grid-column: span 2 / span 2; }
         }
     </style>
 </head>
@@ -132,7 +154,6 @@
                         <label for="user-nickname">Seu Apelido</label>
                         <input type="text" id="user-nickname" placeholder="Ex: Miguel">
                     </div>
-                    <!-- NOVO: Campo para nome da sala -->
                     <div class="input-group">
                         <label for="session-name">Nome da Sala</label>
                         <input type="text" id="session-name" placeholder="Ex: Compras da Semana">
@@ -148,8 +169,7 @@
                     </div>
                 </div>
                 <div id="session-info" style="display: none;">
-                    <!-- NOVO: Exibição do nome da sala -->
-                    <p><strong>Nome da Sala:</strong> <span id="session-name-display"></span></p>
+                    <p><strong>Nome da Sala:</strong> <span id="session-name-display" style="font-weight: bold;"></span></p>
                     <p><strong>Código da Sala:</strong> <span id="session-id-display" title="Clique para copiar"></span></p>
                     <p><strong>Participantes:</strong></p>
                     <div id="participants-list"></div>
@@ -161,7 +181,7 @@
         <main class="main-content">
             <div>
                 <section class="card" style="margin-bottom: 2rem;">
-                     <h2>💰 Orçamento e Itens</h2>
+                     <h2>💰 Orçamento e Ações</h2>
                     <div class="input-group">
                         <label for="orcamento">Orçamento (R$)</label>
                         <input type="number" id="orcamento" placeholder="Ex: 500" step="0.01" min="0">
@@ -180,11 +200,19 @@
                             <div class="valor restante" id="valor-restante">R$ 0,00</div>
                         </div>
                     </div>
-                    <div class="header-buttons" style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
-                        <button id="pdf-btn" class="btn btn-primary">📄 PDF</button>
-                        <button id="whatsapp-btn" class="btn btn-whatsapp">📱 WhatsApp</button>
-                        <button id="compare-btn" class="btn btn-compare">🔍 Comparar</button>
-                        <button id="limpar-lista-btn" class="btn btn-danger">🗑️ Limpar</button>
+                    <div class="header-buttons" style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                        <button id="pdf-btn" class="btn btn-secondary btn-icon" title="Gerar PDF">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M4 12v-2a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M9 17a1 1 0 0 1 1-1h4a1 1 0 0 1 0 2H10a1 1 0 0 1-1-1Z"/><path d="M9 13a1 1 0 0 1 1-1h2a1 1 0 0 1 0 2H10a1 1 0 0 1-1-1Z"/></svg>
+                        </button>
+                        <button id="whatsapp-btn" class="btn btn-whatsapp btn-icon" title="Compartilhar no WhatsApp">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        </button>
+                        <button id="compare-btn" class="btn btn-compare btn-icon" title="Comparar Preços">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        </button>
+                        <button id="limpar-lista-btn" class="btn btn-danger btn-icon" title="Limpar Lista">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                        </button>
                     </div>
                 </section>
                 
@@ -329,7 +357,6 @@
             if (!currentUser.id) { alert("Aguarde a conexão..."); return; }
             saveNickname();
             
-            // NOVO: Pega o nome da sala do input
             const sessionName = document.getElementById('session-name').value.trim();
             if (!sessionName) {
                 alert('Por favor, dê um nome para a sala.');
@@ -339,7 +366,6 @@
             const sessionId = Math.random().toString(36).substring(2, 8).toUpperCase();
             const sessionDocRef = doc(db, "sessions", sessionId);
             
-            // NOVO: Adiciona o nome da sala aos dados iniciais
             const initialData = { ...appData, sessionName, participantes: [currentUser], createdAt: serverTimestamp() };
             await setDoc(sessionDocRef, initialData);
             joinSession(sessionId);
@@ -469,7 +495,9 @@
                             <div class="item-detalhes">Qtd: ${p.quantidade} | ${currentSessionId ? `Add por: ${p.addedBy}` : `Valor: R$ ${formatCurrency(p.valor)}`}</div>
                         </div>
                         <div class="item-valor">R$ ${formatCurrency(p.total)}</div>
-                        <button class="btn-remover" onclick="window.app.removerProduto(${p.id})">🗑️</button>
+                        <button class="btn-remover" onclick="window.app.removerProduto(${p.id})">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
                     </div>`).join('');
             }
 
