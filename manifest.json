@@ -2,7 +2,7 @@
   "name": "Comprinhas do Mês",
   "short_name": "Comprinhas",
   "description": "Organize suas compras do mês e compare preços de forma fácil.",
-  "start_url": "/comprinhas_integrado.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#030712",
   "theme_color": "#818cf8",
