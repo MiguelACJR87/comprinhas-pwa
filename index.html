@@ -55,7 +55,14 @@
         header { margin-bottom: 2rem; }
         
         .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 12px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+        /* NOVO: Estilo para botões desabilitados */
+        .btn:disabled {
+            background-color: #374151;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
         .btn-primary { background-color: var(--primary-color); color: var(--bg-color); }
+        .btn-primary:hover:not(:disabled) { background-color: #6366f1; transform: translateY(-2px); }
         .btn-whatsapp { background-color: var(--whatsapp-color); color: white; }
         .btn-secondary { background-color: var(--secondary-btn-color); color: var(--text-primary); }
         .btn-compare { background-color: var(--compare-color); color: var(--bg-color); }
@@ -143,12 +150,13 @@
                         <input type="text" id="user-nickname" placeholder="Ex: Miguel">
                     </div>
                     <div class="form-grid">
-                        <button id="create-session-btn" class="btn btn-primary">Criar Sala</button>
+                        <!-- ATUALIZADO: Botões começam desabilitados -->
+                        <button id="create-session-btn" class="btn btn-primary" disabled>Criar Sala</button>
                         <div>
                             <div class="input-group" style="margin-bottom: 1rem;">
                                 <input type="text" id="join-session-input" placeholder="Código da Sala">
                             </div>
-                            <button id="join-session-btn" class="btn btn-secondary" style="width: 100%;">Entrar na Sala</button>
+                            <button id="join-session-btn" class="btn btn-secondary" style="width: 100%;" disabled>Entrar na Sala</button>
                         </div>
                     </div>
                 </div>
@@ -238,39 +246,51 @@
             });
         });
 
-       async function initializeFirebase() {
-    try {
-        // ▼▼▼ COLE A SUA CONFIGURAÇÃO DO FIREBASE AQUI ▼▼▼
-        const firebaseConfig = {
-  apiKey: "AIzaSyDUi_YD8sQ4DnqETjJwydo__cs_ymQqG6A",
-  authDomain: "comprinhas-pwa-app.firebaseapp.com",
-  projectId: "comprinhas-pwa-app",
-  storageBucket: "comprinhas-pwa-app.firebasestorage.app",
-  messagingSenderId: "190566692232",
-  appId: "1:190566692232:web:76c4ed086f8f3f5300f63d"
-};
-        // ▲▲▲ FIM DA CONFIGURAÇÃO ▲▲▲
+        async function initializeFirebase() {
+            try {
+                // ATUALIZADO: Cole sua configuração do Firebase aqui se não estiver usando o ambiente do Canvas
+                const firebaseConfig = {
+                  // Substitua pelo seu objeto de configuração do Firebase
+                  apiKey: "AIza...",
+                  authDomain: "seu-projeto.firebaseapp.com",
+                  // ...etc
+                };
 
-        if (!firebaseConfig.apiKey) {
-            console.error("Configuração do Firebase não encontrada!");
-            return;
+                if (!firebaseConfig.apiKey || firebaseConfig.apiKey === "AIza...") {
+                    console.warn("Configuração do Firebase está faltando ou é um placeholder.");
+                    // Opcional: Desabilitar a funcionalidade online se a config não estiver presente
+                    document.getElementById('create-session-btn').textContent = "Offline";
+                    document.getElementById('join-session-btn').textContent = "Offline";
+                    return;
+                }
+
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                setLogLevel('debug');
+
+                onAuthStateChanged(auth, user => {
+                    if (user) {
+                        console.log("Usuário autenticado:", user.uid);
+                        currentUser.id = user.uid;
+                        // ATUALIZADO: Habilita os botões após a autenticação
+                        document.getElementById('create-session-btn').disabled = false;
+                        document.getElementById('join-session-btn').disabled = false;
+                    } else {
+                        console.log("Usuário não está autenticado.");
+                        // Mantém os botões desabilitados
+                        document.getElementById('create-session-btn').disabled = true;
+                        document.getElementById('join-session-btn').disabled = true;
+                    }
+                });
+
+                await signInAnonymously(auth);
+
+            } catch (error) {
+                console.error("Erro ao inicializar o Firebase:", error);
+                alert("Não foi possível conectar ao servidor. A funcionalidade online está desativada.");
+            }
         }
-
-        const app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        auth = getAuth(app);
-        setLogLevel('debug');
-
-        onAuthStateChanged(auth, user => {
-            if (user) currentUser.id = user.uid;
-        });
-
-        await signInAnonymously(auth);
-
-    } catch (error) {
-        console.error("Erro ao inicializar o Firebase:", error);
-    }
-}
 
         function setupEventListeners() {
             // Session
@@ -321,7 +341,7 @@
             if (!currentUser.id) { alert("Aguarde a conexão..."); return; }
             saveNickname();
             const sessionId = Math.random().toString(36).substring(2, 8).toUpperCase();
-            const sessionDocRef = doc(db, `artifacts/${getAppId()}/public/data/sessions`, sessionId);
+            const sessionDocRef = doc(db, "sessions", sessionId); // Caminho simplificado
             const initialData = { ...appData, participantes: [currentUser], createdAt: serverTimestamp() };
             await setDoc(sessionDocRef, initialData);
             joinSession(sessionId);
@@ -333,7 +353,7 @@
             const sessionId = document.getElementById('join-session-input').value.trim();
             if (!sessionId) { alert("Insira o código da sala."); return; }
 
-            const sessionDocRef = doc(db, `artifacts/${getAppId()}/public/data/sessions`, sessionId);
+            const sessionDocRef = doc(db, "sessions", sessionId); // Caminho simplificado
             const sessionDoc = await getDoc(sessionDocRef);
             if (!sessionDoc.exists()) { alert("Sala não encontrada."); return; }
             if ((sessionDoc.data().participantes || []).length >= 4) { alert("Sala cheia."); return; }
@@ -350,7 +370,7 @@
             document.getElementById('session-id-display').textContent = sessionId;
 
             if (unsubscribeSession) unsubscribeSession();
-            const sessionDocRef = doc(db, `artifacts/${getAppId()}/public/data/sessions`, sessionId);
+            const sessionDocRef = doc(db, "sessions", sessionId); // Caminho simplificado
             unsubscribeSession = onSnapshot(sessionDocRef, (doc) => {
                 if (doc.exists()) {
                     appData = doc.data();
@@ -364,8 +384,10 @@
         
         async function handleLeaveSession() {
             if (!currentSessionId) return;
-            const sessionDocRef = doc(db, `artifacts/${getAppId()}/public/data/sessions`, currentSessionId);
-            await updateDoc(sessionDocRef, { participantes: arrayRemove(currentUser) });
+            const sessionDocRef = doc(db, "sessions", currentSessionId); // Caminho simplificado
+            try {
+                await updateDoc(sessionDocRef, { participantes: arrayRemove(currentUser) });
+            } catch(e) { /* Ignore error if doc is gone */ }
 
             if (unsubscribeSession) unsubscribeSession();
             unsubscribeSession = null;
@@ -387,7 +409,7 @@
             const produto = { id: Date.now(), nome, quantidade, valor, total: quantidade * valor, addedBy: currentUser.nickname };
 
             if (currentSessionId) {
-                const sessionDocRef = doc(db, `artifacts/${getAppId()}/public/data/sessions`, currentSessionId);
+                const sessionDocRef = doc(db, "sessions", currentSessionId);
                 updateDoc(sessionDocRef, { listaCompras: arrayUnion(produto) });
             } else {
                 appData.listaCompras.push(produto);
@@ -402,7 +424,7 @@
         function handleRemoverProduto(produtoId) {
             if (currentSessionId) {
                 const newList = appData.listaCompras.filter(p => p.id !== produtoId);
-                const sessionDocRef = doc(db, `artifacts/${getAppId()}/public/data/sessions`, currentSessionId);
+                const sessionDocRef = doc(db, "sessions", currentSessionId);
                 updateDoc(sessionDocRef, { listaCompras: newList });
             } else {
                 appData.listaCompras = appData.listaCompras.filter(p => p.id !== produtoId);
@@ -414,7 +436,7 @@
         function handleOrcamentoChange() {
             const newOrcamento = parseFloat(document.getElementById('orcamento').value) || 0;
             if (currentSessionId) {
-                const sessionDocRef = doc(db, `artifacts/${getAppId()}/public/data/sessions`, currentSessionId);
+                const sessionDocRef = doc(db, "sessions", currentSessionId);
                 updateDoc(sessionDocRef, { orcamento: newOrcamento });
             } else {
                 appData.orcamento = newOrcamento;
@@ -426,7 +448,7 @@
         function handleLimparLista() {
             if (confirm('Tem certeza que deseja limpar toda a lista?')) {
                 if (currentSessionId) {
-                    const sessionDocRef = doc(db, `artifacts/${getAppId()}/public/data/sessions`, currentSessionId);
+                    const sessionDocRef = doc(db, "sessions", currentSessionId);
                     updateDoc(sessionDocRef, { listaCompras: [] });
                 } else {
                     appData.listaCompras = [];
@@ -520,11 +542,6 @@
             let mensagem = `🛒 *Lista de Compras${currentSessionId ? ` (Sala: ${currentSessionId})` : ''}*\n\n...`; // Seu código de mensagem aqui
             const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
-        }
-
-        // --- HELPERS ---
-        function getAppId() {
-             return typeof __app_id !== 'undefined' ? __app_id : 'comprinhas-app-default';
         }
         
         window.app = {
