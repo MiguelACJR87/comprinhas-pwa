@@ -323,10 +323,10 @@
 
 
     <script>
-        // ... (todo o seu script original até a última função) ...
         // Global variables
         let listaCompras = [];
         let orcamento = 0;
+        let valorRestanteAnterior = 0; // NOVO: Para controlar o alerta de orçamento
         
         // API Configuration
         const API_BASE_URL = 'http://localhost:5001/api';
@@ -459,8 +459,10 @@
             document.getElementById('valor').focus();
         }
 
+        // ATUALIZADO: para resetar o valor anterior
         function updateOrcamento() {
             orcamento = parseFloat(document.getElementById('orcamento').value) || 0;
+            valorRestanteAnterior = orcamento; // Redefine o valor anterior ao mudar o orçamento
             updateResumoFinanceiro();
         }
 
@@ -530,9 +532,23 @@
             `).join('');
         }
 
+        // ATUALIZADO: com a lógica do alerta
         function updateResumoFinanceiro() {
             const totalGasto = listaCompras.reduce((sum, produto) => sum + produto.total, 0);
             const restante = orcamento - totalGasto;
+            const limiteAlerta = orcamento * 0.10;
+
+            // ---- INÍCIO DA NOVA LÓGICA DE ALERTA ----
+            // Condições:
+            // 1. O orçamento precisa ser maior que zero.
+            // 2. O valor restante anterior estava ACIMA do limite de 10%.
+            // 3. O valor restante atual está ABAIXO ou IGUAL ao limite de 10%.
+            if (orcamento > 0 && valorRestanteAnterior > limiteAlerta && restante <= limiteAlerta) {
+                alert(`Atenção! Seu orçamento restante atingiu 10% ou menos do total. Restam apenas R$ ${restante.toFixed(2)}.`);
+            }
+            // Atualiza o valor anterior para a próxima verificação
+            valorRestanteAnterior = restante;
+            // ---- FIM DA NOVA LÓGICA DE ALERTA ----
             
             document.getElementById('valor-orcamento').textContent = `R$ ${orcamento.toFixed(2)}`;
             document.getElementById('valor-gasto').textContent = `R$ ${totalGasto.toFixed(2)}`;
@@ -871,7 +887,7 @@
             document.getElementById('price-comparison-modal').style.display = 'none';
         }
 
-        // NOVO: Registra o Service Worker
+        // Registra o Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
