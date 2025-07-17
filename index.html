@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Meta Tags para PWA e Comportamento Nativo -->
     <meta name="theme-color" content="#818cf8"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -44,625 +43,66 @@
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
-        .shake-animation { animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both; }
-        
-        .notification-banner { display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 600px; background-color: var(--danger-color); color: white; text-align: center; padding: 1rem; border-radius: 50px; z-index: 2000; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.25); animation: fadeIn 0.5s ease-out; }
         
         .card { background: var(--surface-color); padding: 1.5rem; border-radius: 28px; border: 1px solid var(--border-color); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); }
         .card h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
-        header { margin-bottom: 2rem; }
         
-        .btn { padding: 0.8rem 1.6rem; border: none; border-radius: 14px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s ease-in-out; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); transform: translateY(0); }
-        .btn:active:not(:disabled) { transform: translateY(1px) scale(0.98); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
-        .btn:disabled { background-color: #374151; cursor: not-allowed; opacity: 0.6; }
-        .btn-primary { background: linear-gradient(45deg, var(--primary-color), var(--primary-hover)); color: white; border: 1px solid rgba(255, 255, 255, 0.1); }
-        .btn-whatsapp { background-color: var(--whatsapp-color); color: white; }
-        .btn-secondary { background-color: var(--secondary-btn-color); color: var(--text-primary); }
-        .btn-compare { background-color: var(--compare-color); color: var(--bg-color); }
-        .btn-danger { background-color: var(--danger-color); color: white; }
-        .btn-icon { padding: 0.8rem; }
-
-        .input-group { margin-bottom: 1.5rem; }
-        .input-group label { display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-weight: 500; font-size: 0.9rem; }
-        .input-group input { width: 100%; padding: 0.875rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 14px; color: var(--text-primary); font-size: 1rem; transition: all 0.3s ease; }
-        .input-group input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 4px var(--primary-glow); }
-        
-        .main-content { display: grid; grid-template-columns: 1fr; gap: 2rem; }
-        
-        .item-lista { display: flex; align-items: center; padding: 1rem; margin-bottom: 0.75rem; background: rgba(255, 255, 255, 0.03); border-radius: 16px; border: 1px solid transparent; transition: all 0.3s ease; }
-        .item-lista:hover { border-color: var(--border-color); background: rgba(255, 255, 255, 0.05); }
-        .item-info { flex-grow: 1; }
-        .item-nome { font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
-        .item-detalhes { font-size: 0.85rem; color: var(--text-secondary); }
-        .item-valor { font-weight: 700; color: var(--accent-color); font-size: 1.1rem; margin-left: 1rem; }
-        .btn-remover { background: none; border: none; color: var(--danger-color); cursor: pointer; padding: 0.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .btn-remover:hover { background: rgba(251, 113, 133, 0.1); }
-        
-        #session-info { margin-top: 1.5rem; padding: 1.5rem; background: rgba(129, 140, 248, 0.1); border-radius: 20px; border: 1px solid var(--primary-color); }
-        #session-info p { margin-bottom: 0.75rem; }
-        #session-info strong { color: var(--primary-color); }
-        #session-id-display { user-select: all; cursor: pointer; font-weight: bold; }
-        #participants-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-        .participant-chip { background: var(--secondary-btn-color); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; }
-        .form-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-
-        .categorias-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-        .categoria-card { cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .categoria-card.expandida .categoria-produtos { max-height: 500px; margin-top: 1rem; }
-        .categoria-produtos { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; margin-top: 0; }
-        .produto-item { padding: 0.75rem; margin-bottom: 0.5rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px; cursor: pointer; }
-        
-        .form-row { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
-        .form-row .btn { margin-top: 1rem; width: 100%; }
-
-        .resumo-financeiro { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-        .resumo-item h3 { color: var(--text-secondary); font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem; }
-        .resumo-item .valor { font-size: 1.8rem; font-weight: 700; color: var(--text-primary); }
-        .resumo-item .valor.orcamento { color: var(--primary-color); }
-        .resumo-item .valor.gasto { color: var(--accent-color); }
-        .resumo-item .valor.restante { color: var(--danger-color); }
-        .resumo-item .valor.restante.positivo { color: var(--accent-color); }
-        
-        /* NOVO: Estilos do Modal de Comparação */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); }
-        .modal-content { background: var(--surface-color); margin: 10% auto; padding: 0; border: 1px solid var(--border-color); width: 90%; max-width: 800px; border-radius: 28px; animation: fadeIn 0.3s; }
+        .modal-content { background: var(--surface-color); margin: 5% auto; padding: 0; border: 1px solid var(--border-color); width: 90%; max-width: 800px; border-radius: 28px; animation: fadeIn 0.3s; }
         .modal-header { padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .modal-header h2 { margin: 0; font-size: 1.5rem; }
         .close-modal { color: var(--text-secondary); font-size: 2.5rem; font-weight: bold; cursor: pointer; line-height: 1; }
         .close-modal:hover { color: var(--text-primary); }
-        .modal-body { padding: 1.5rem; max-height: 60vh; overflow-y: auto; }
+        .modal-body { padding: 1.5rem; max-height: 70vh; overflow-y: auto; }
         .loading { text-align: center; padding: 2rem; }
         .spinner { border: 4px solid var(--border-color); border-top: 4px solid var(--primary-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .market-card { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; }
-        .market-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .market-name { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); }
-        .market-score { background: var(--primary-color); color: var(--bg-color); padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
-        .market-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
-        .stat-item { text-align: center; }
-        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-color); }
-        .stat-label { font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
-        .product-list-comparison { margin-top: 1rem; }
-        .product-item-comparison { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
-        .product-item-comparison:last-child { border-bottom: none; }
-        .product-status { padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
-        .status-encontrado { background: rgba(52, 211, 153, 0.2); color: var(--accent-color); }
-        .status-estimado { background: rgba(245, 158, 11, 0.2); color: var(--compare-color); }
-        .status-nao-encontrado { background: rgba(251, 113, 133, 0.2); color: var(--danger-color); }
-
-        @media (min-width: 640px) {
-            .form-grid { grid-template-columns: 1fr 1fr; }
-            .form-row { grid-template-columns: 2fr 1fr 1fr auto; gap: 1rem; }
-            .form-row .btn { margin-top: 0; width: auto; }
-        }
-        @media (min-width: 1024px) {
-            .main-content { grid-template-columns: 1fr 1fr; }
-        }
-        @media (min-width: 1280px) {
-            .main-content { grid-template-columns: 1fr 1fr 1fr; }
-            .main-content > .card:last-of-type { grid-column: span 2 / span 2; }
-        }
+        
+        .recommendation-summary { background: rgba(129, 140, 248, 0.1); border: 1px solid var(--primary-color); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; text-align: center; }
+        .recommendation-summary h3 { color: var(--primary-color); margin-top: 0; font-size: 1.5rem; }
+        .recommendation-summary p { margin-bottom: 0; color: var(--text-secondary); }
+        
+        .product-comparison-card { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; }
+        .product-comparison-card h3 { color: var(--text-primary); }
+        .price-entry { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
+        .price-entry:last-child { border-bottom: none; }
+        .price-details .location { font-size: 0.9rem; color: var(--text-secondary); }
+        .price-details .best-price-tag { font-size: 0.8rem; font-weight: bold; color: var(--compare-color); }
+        .price-value { font-size: 1.2rem; font-weight: 700; color: var(--accent-color); }
+        .no-prices-found { color: var(--danger-color); font-style: italic; }
+		/* ... Cole o resto do seu CSS aqui ... */
     </style>
 </head>
 <body>
-    <div id="notification-banner" class="notification-banner"></div>
-
-    <div id="splash-screen">
-        <h1>🛒 Comprinhas do Mês</h1>
-        <button id="start-button">Começar</button>
-    </div>
-
-    <div id="app-container">
-        <header class="fade-in-up">
-            <div class="card">
-                 <h2>🤝 Comprinha Compartilhada</h2>
-                <div id="session-setup">
-                    <div class="input-group">
-                        <label for="user-nickname">Seu Apelido</label>
-                        <input type="text" id="user-nickname" placeholder="Ex: Miguel">
-                    </div>
-                    <div class="input-group">
-                        <label for="session-name">Nome da Sala</label>
-                        <input type="text" id="session-name" placeholder="Ex: Compras da Semana">
-                    </div>
-                    <div class="form-grid">
-                        <button id="create-session-btn" class="btn btn-primary" disabled>Criar Sala</button>
-                        <div>
-                            <div class="input-group" style="margin-bottom: 1rem;">
-                                <input type="text" id="join-session-input" placeholder="Código da Sala">
-                            </div>
-                            <button id="join-session-btn" class="btn btn-secondary" style="width: 100%;" disabled>Entrar na Sala</button>
-                        </div>
-                    </div>
-                </div>
-                <div id="session-info" style="display: none;">
-                    <p><strong>Nome da Sala:</strong> <span id="session-name-display" style="font-weight: bold;"></span></p>
-                    <p><strong>Código da Sala:</strong> <span id="session-id-display" title="Clique para copiar"></span></p>
-                    <p><strong>Participantes:</strong></p>
-                    <div id="participants-list"></div>
-                    <button id="leave-session-btn" class="btn btn-danger" style="margin-top: 1rem;">Sair da Sala</button>
-                </div>
-            </div>
-        </header>
-
-        <main class="main-content">
-            <div>
-                <section class="card" style="margin-bottom: 2rem;">
-                     <h2>💰 Orçamento e Ações</h2>
-                    <div class="input-group">
-                        <label for="orcamento">Orçamento (R$)</label>
-                        <input type="number" id="orcamento" placeholder="Ex: 500" step="0.01" min="0">
-                    </div>
-                     <div class="resumo-financeiro">
-                        <div class="resumo-item">
-                            <h3>Orçamento</h3>
-                            <div class="valor orcamento" id="valor-orcamento">R$ 0,00</div>
-                        </div>
-                        <div class="resumo-item">
-                            <h3>Gasto</h3>
-                            <div class="valor gasto" id="valor-gasto">R$ 0,00</div>
-                        </div>
-                        <div class="resumo-item">
-                            <h3>Restante</h3>
-                            <div class="valor restante" id="valor-restante">R$ 0,00</div>
-                        </div>
-                    </div>
-                    <div class="header-buttons" style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
-                        <button id="pdf-btn" class="btn btn-secondary btn-icon" title="Gerar PDF">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M4 12v-2a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M9 17a1 1 0 0 1 1-1h4a1 1 0 0 1 0 2H10a1 1 0 0 1-1-1Z"/><path d="M9 13a1 1 0 0 1 1-1h2a1 1 0 0 1 0 2H10a1 1 0 0 1-1-1Z"/></svg>
-                        </button>
-                        <button id="whatsapp-btn" class="btn btn-whatsapp btn-icon" title="Compartilhar no WhatsApp">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        </button>
-                        <button id="compare-btn" class="btn btn-compare btn-icon" title="Comparar Preços">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        </button>
-                        <button id="limpar-lista-btn" class="btn btn-danger btn-icon" title="Limpar Lista">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                        </button>
-                    </div>
-                </section>
-                
-                <section class="card">
-                    <h2>🏪 Categorias de Produtos</h2>
-                    <div class="categorias-grid" id="categorias-container"></div>
-                </section>
-                
-                <section class="card" style="margin-top: 2rem;">
-                    <h2>➕ Adicionar Produto</h2>
-                    <div class="form-row">
-                        <div class="input-group"><label for="nome-produto">Nome</label><input type="text" id="nome-produto"></div>
-                        <div class="input-group"><label for="quantidade">Qtd</label><input type="number" id="quantidade" value="1"></div>
-                        <div class="input-group"><label for="valor">Valor</label><input type="number" id="valor"></div>
-                        <button id="adicionar-btn" class="btn btn-primary">Adicionar</button>
-                    </div>
-                </section>
-            </div>
-
-            <section class="card">
-                <h2>📝 A Nossa Lista</h2>
-                <div id="lista-container">
-                    <div class="lista-vazia"><div class="icon">🛒</div><p>Sua lista está vazia</p></div>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <!-- NOVO: Modal de Comparação de Preços -->
     <div id="price-comparison-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🔍 Comparação de Preços</h2>
+                <h2>📊 Análise de Preços</h2>
                 <span class="close-modal">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="loading" id="comparison-loading">
                     <div class="spinner"></div>
-                    <p>Buscando os melhores preços na sua região...</p>
+                    <p>Analisando preços no banco de dados colaborativo...</p>
                 </div>
                 <div id="comparison-results" style="display: none;"></div>
             </div>
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, arrayUnion, arrayRemove, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // --- GLOBAL STATE ---
-        let db, auth;
-        let currentSessionId = null;
-        let currentUser = { id: null, nickname: 'Anônimo' };
-        let unsubscribeSession = null;
-        let appData = {
-            sessionName: '',
-            orcamento: 0,
-            listaCompras: [],
-            participantes: []
-        };
-        let valorRestanteAnterior = 0;
-
-        // --- INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('start-button').addEventListener('click', () => {
-                document.getElementById('splash-screen').style.display = 'none';
-                document.getElementById('app-container').style.display = 'block';
-                initializeFirebase();
-                setupEventListeners();
-                loadLocalData();
-                populateCategories();
-            });
-        });
-
-        async function initializeFirebase() {
-            try {
-                const firebaseConfig = {
-                  apiKey: "AIzaSyDUi_YD8sQ4DnqETjJwydo__cs_ymQqG6A",
-                  authDomain: "comprinhas-pwa-app.firebaseapp.com",
-                  projectId: "comprinhas-pwa-app",
-                  storageBucket: "comprinhas-pwa-app.appspot.com",
-                  messagingSenderId: "190566692232",
-                  appId: "1:190566692232:web:76c4ed086f8f3f5300f63d"
-                };
-
-                if (!firebaseConfig.apiKey) {
-                    console.warn("Configuração do Firebase está faltando.");
-                    return;
-                }
-
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                setLogLevel('debug');
-
-                onAuthStateChanged(auth, user => {
-                    if (user) {
-                        currentUser.id = user.uid;
-                        document.getElementById('create-session-btn').disabled = false;
-                        document.getElementById('join-session-btn').disabled = false;
-                    } else {
-                        document.getElementById('create-session-btn').disabled = true;
-                        document.getElementById('join-session-btn').disabled = true;
-                    }
-                });
-
-                await signInAnonymously(auth);
-
-            } catch (error) {
-                console.error("Erro ao inicializar o Firebase:", error);
-                alert("Não foi possível conectar ao servidor.");
-            }
-        }
-
-        function setupEventListeners() {
-            document.getElementById('create-session-btn').addEventListener('click', handleCreateSession);
-            document.getElementById('join-session-btn').addEventListener('click', handleJoinSession);
-            document.getElementById('leave-session-btn').addEventListener('click', handleLeaveSession);
-            document.getElementById('session-id-display').addEventListener('click', () => navigator.clipboard.writeText(currentSessionId));
-            document.getElementById('user-nickname').addEventListener('input', saveNickname);
-            document.getElementById('orcamento').addEventListener('change', handleOrcamentoChange);
-            document.getElementById('adicionar-btn').addEventListener('click', handleAdicionarProduto);
-            document.getElementById('limpar-lista-btn').addEventListener('click', handleLimparLista);
-            document.getElementById('pdf-btn').addEventListener('click', gerarPDF);
-            document.getElementById('whatsapp-btn').addEventListener('click', compartilharWhatsApp);
-            // ATUALIZADO: Listener para o botão de comparar
-            document.getElementById('compare-btn').addEventListener('click', compararPrecos);
-            document.querySelector('.close-modal').addEventListener('click', () => document.getElementById('price-comparison-modal').style.display = 'none');
-            window.addEventListener('click', (event) => { if (event.target == document.getElementById('price-comparison-modal')) { document.getElementById('price-comparison-modal').style.display = 'none'; } });
-        }
-
-        function loadLocalData() {
-            const savedNickname = localStorage.getItem('userNickname');
-            if (savedNickname) {
-                currentUser.nickname = savedNickname;
-                document.getElementById('user-nickname').value = savedNickname;
-            }
-            const savedData = localStorage.getItem('appData');
-            if (savedData && !currentSessionId) {
-                appData = JSON.parse(savedData);
-                updateUI();
-            }
-        }
-
-        function saveLocalData() {
-            if (!currentSessionId) {
-                localStorage.setItem('appData', JSON.stringify(appData));
-            }
-        }
-
-        function saveNickname() {
-            const nickname = document.getElementById('user-nickname').value.trim();
-            if (nickname) {
-                currentUser.nickname = nickname;
-                localStorage.setItem('userNickname', nickname);
-            }
-        }
-
-        async function handleCreateSession() {
-            if (!currentUser.id) { alert("Aguarde a conexão..."); return; }
-            saveNickname();
-            
-            const sessionName = document.getElementById('session-name').value.trim();
-            if (!sessionName) {
-                alert('Por favor, dê um nome para a sala.');
-                return;
-            }
-
-            const sessionId = Math.random().toString(36).substring(2, 8).toUpperCase();
-            const sessionDocRef = doc(db, "sessions", sessionId);
-            
-            const initialData = { ...appData, sessionName, participantes: [currentUser], createdAt: serverTimestamp() };
-            await setDoc(sessionDocRef, initialData);
-            joinSession(sessionId);
-        }
-
-        async function handleJoinSession() {
-            if (!currentUser.id) { alert("Aguarde a conexão..."); return; }
-            saveNickname();
-            const sessionId = document.getElementById('join-session-input').value.trim();
-            if (!sessionId) { alert("Insira o código da sala."); return; }
-
-            const sessionDocRef = doc(db, "sessions", sessionId);
-            const sessionDoc = await getDoc(sessionDocRef);
-            if (!sessionDoc.exists()) { alert("Sala não encontrada."); return; }
-            if ((sessionDoc.data().participantes || []).length >= 4) { alert("Sala cheia."); return; }
-
-            await updateDoc(sessionDocRef, { participantes: arrayUnion(currentUser) });
-            joinSession(sessionId);
-        }
-
-        function joinSession(sessionId) {
-            currentSessionId = sessionId;
-            localStorage.removeItem('appData');
-            document.getElementById('session-setup').style.display = 'none';
-            document.getElementById('session-info').style.display = 'block';
-            document.getElementById('session-id-display').textContent = sessionId;
-
-            if (unsubscribeSession) unsubscribeSession();
-            const sessionDocRef = doc(db, "sessions", sessionId);
-            unsubscribeSession = onSnapshot(sessionDocRef, (doc) => {
-                if (doc.exists()) {
-                    appData = doc.data();
-                    updateUI();
-                } else {
-                    alert("A sala foi encerrada.");
-                    handleLeaveSession();
-                }
-            });
-        }
         
-        async function handleLeaveSession() {
-            if (!currentSessionId) return;
-            const sessionDocRef = doc(db, "sessions", currentSessionId);
-            try {
-                await updateDoc(sessionDocRef, { participantes: arrayRemove(currentUser) });
-            } catch(e) { /* Ignore */ }
+        // --- COLE SEU CÓDIGO JS EXISTENTE (ESTADO GLOBAL, FIREBASE, EVENTOS, ETC) AQUI ---
+        // --- ... OMITIDO POR BREVIDADE ... ---
+		// A única parte que você precisa substituir é a seção de comparação de preços abaixo.
 
-            if (unsubscribeSession) unsubscribeSession();
-            unsubscribeSession = null;
-            currentSessionId = null;
+        // =======================================================================
+        // ✨ LÓGICA DE COMPARAÇÃO DE PREÇOS COM RECOMENDAÇÃO DE MERCADO
+        // =======================================================================
 
-            document.getElementById('session-setup').style.display = 'block';
-            document.getElementById('session-info').style.display = 'none';
-            appData = { orcamento: 0, listaCompras: [], participantes: [] };
-            loadLocalData();
-        }
-
-        function handleAdicionarProduto() {
-            const nome = document.getElementById('nome-produto').value.trim();
-            const quantidade = parseInt(document.getElementById('quantidade').value) || 1;
-            const valor = parseFloat(document.getElementById('valor').value) || 0;
-            if (!nome || valor <= 0) { alert('Preencha o nome e um valor válido.'); return; }
-            
-            const produto = { id: Date.now(), nome, quantidade, valor, total: quantidade * valor, addedBy: currentUser.nickname };
-
-            if (currentSessionId) {
-                const sessionDocRef = doc(db, "sessions", currentSessionId);
-                updateDoc(sessionDocRef, { listaCompras: arrayUnion(produto) });
-            } else {
-                appData.listaCompras.push(produto);
-                updateUI();
-                saveLocalData();
-            }
-            document.getElementById('nome-produto').value = '';
-            document.getElementById('quantidade').value = '1';
-            document.getElementById('valor').value = '';
-        }
-
-        function handleRemoverProduto(produtoId) {
-            if (currentSessionId) {
-                const newList = appData.listaCompras.filter(p => p.id !== produtoId);
-                const sessionDocRef = doc(db, "sessions", currentSessionId);
-                updateDoc(sessionDocRef, { listaCompras: newList });
-            } else {
-                appData.listaCompras = appData.listaCompras.filter(p => p.id !== produtoId);
-                updateUI();
-                saveLocalData();
-            }
-        }
-
-        function handleOrcamentoChange() {
-            const newOrcamento = parseFloat(document.getElementById('orcamento').value) || 0;
-            if (currentSessionId) {
-                const sessionDocRef = doc(db, "sessions", currentSessionId);
-                updateDoc(sessionDocRef, { orcamento: newOrcamento });
-            } else {
-                appData.orcamento = newOrcamento;
-                updateUI();
-                saveLocalData();
-            }
-        }
-
-        function handleLimparLista() {
-            if (confirm('Tem certeza que deseja limpar toda a lista?')) {
-                if (currentSessionId) {
-                    const sessionDocRef = doc(db, "sessions", currentSessionId);
-                    updateDoc(sessionDocRef, { listaCompras: [] });
-                } else {
-                    appData.listaCompras = [];
-                    updateUI();
-                    saveLocalData();
-                }
-            }
-        }
-
-        function updateUI() {
-            const { orcamento, listaCompras, participantes, sessionName } = appData;
-            
-            const listaContainer = document.getElementById('lista-container');
-            if (!listaCompras || listaCompras.length === 0) {
-                listaContainer.innerHTML = `<div class="lista-vazia"><div class="icon">🛒</div><p>Sua lista está vazia</p></div>`;
-            } else {
-                listaContainer.innerHTML = listaCompras.map(p => `
-                    <div class="item-lista">
-                        <div class="item-info">
-                            <div class="item-nome">${p.nome}</div>
-                            <div class="item-detalhes">Qtd: ${p.quantidade} | ${currentSessionId ? `Add por: ${p.addedBy}` : `Valor: R$ ${formatCurrency(p.valor)}`}</div>
-                        </div>
-                        <div class="item-valor">R$ ${formatCurrency(p.total)}</div>
-                        <button class="btn-remover" onclick="window.app.removerProduto(${p.id})">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                        </button>
-                    </div>`).join('');
-            }
-
-            document.getElementById('orcamento').value = orcamento;
-            const totalGasto = (listaCompras || []).reduce((sum, p) => sum + p.total, 0);
-            const restante = orcamento - totalGasto;
-            document.getElementById('valor-orcamento').textContent = `R$ ${formatCurrency(orcamento)}`;
-            document.getElementById('valor-gasto').textContent = `R$ ${formatCurrency(totalGasto)}`;
-            const restanteElement = document.getElementById('valor-restante');
-            restanteElement.textContent = `R$ ${formatCurrency(restante)}`;
-            restanteElement.className = `valor restante ${restante >= 0 ? 'positivo' : ''}`;
-
-            const limiteAlerta = orcamento * 0.10;
-            if (orcamento > 0 && valorRestanteAnterior > limiteAlerta && restante <= limiteAlerta) {
-                showNotification(`Atenção, o seu saldo está baixo: R$ ${formatCurrency(restante)}`);
-            }
-            valorRestanteAnterior = restante;
-
-            if(currentSessionId) {
-                document.getElementById('session-name-display').textContent = sessionName || 'Sala sem nome';
-                const participantsContainer = document.getElementById('participants-list');
-                participantsContainer.innerHTML = (participantes || []).map(p => `<div class="participant-chip">${p.nickname}</div>`).join('');
-            }
-        }
-
-        function showNotification(message) {
-            const banner = document.getElementById('notification-banner');
-            banner.textContent = message;
-            banner.style.display = 'block';
-            document.getElementById('app-container').classList.add('shake-animation');
-            setTimeout(() => document.getElementById('app-container').classList.remove('shake-animation'), 600);
-            setTimeout(() => banner.style.display = 'none', 5000);
-        }
-        
-        function formatCurrency(value) {
-            const numberValue = Number(value) || 0;
-            return numberValue.toFixed(2).replace('.', ',');
-        }
-
-        const categorias = {
-            'Mercearia': ['Arroz', 'Feijão', 'Macarrão', 'Óleo', 'Azeite', 'Sal', 'Açúcar', 'Café', 'Farinha de Trigo', 'Fubá', 'Molho de Tomate'],
-            'Laticínios e Frios': ['Leite', 'Queijo', 'Iogurte', 'Manteiga', 'Requeijão', 'Creme de Leite', 'Leite Condensado', 'Presunto', 'Mortadela'],
-            'Carnes e Aves': ['Frango', 'Carne Bovina', 'Carne Suína', 'Linguiça', 'Peixe', 'Bacon'],
-            'Hortifrúti': ['Banana', 'Tomate', 'Alface', 'Cebola', 'Batata', 'Maçã', 'Laranja', 'Cenoura', 'Limão', 'Alho'],
-            'Padaria': ['Pão de Forma', 'Biscoito', 'Pão Francês', 'Bolo', 'Torrada', 'Pão de Queijo'],
-            'Bebidas': ['Refrigerante', 'Suco', 'Água Mineral', 'Cerveja', 'Vinho'],
-            'Limpeza': ['Detergente', 'Sabão em pó', 'Amaciante', 'Água Sanitária', 'Desinfetante', 'Esponja de aço', 'Saco de lixo'],
-            'Higiene Pessoal': ['Shampoo', 'Condicionador', 'Sabonete', 'Pasta de dente', 'Papel higiênico', 'Desodorante', 'Fio dental']
-        };
-        
-        function populateCategories() {
-            const container = document.getElementById('categorias-container');
-            container.innerHTML = Object.entries(categorias).map(([cat, prods]) => `
-                <div class="categoria-card card" onclick="this.classList.toggle('expandida')">
-                    <div class="categoria-header">${cat}</div>
-                    <div class="categoria-produtos">${prods.map(p => `<div class="produto-item" onclick="event.stopPropagation(); window.app.selecionarProduto('${p}')">${p}</div>`).join('')}</div>
-                </div>
-            `).join('');
-        }
-        function selecionarProduto(produto) {
-            document.getElementById('nome-produto').value = produto;
-            document.getElementById('quantidade').value = '1';
-            document.getElementById('valor').focus();
-        }
-
-        function gerarPDF() {
-            const { orcamento, listaCompras, sessionName } = appData;
-            if (!listaCompras || listaCompras.length === 0) {
-                alert('Adicione produtos à lista para gerar um PDF.');
-                return;
-            }
-
-            const totalGasto = listaCompras.reduce((sum, produto) => sum + produto.total, 0);
-            const restante = orcamento - totalGasto;
-            const pdfColors = { primary: '#4A90E2', accent: '#50E3C2', danger: '#E94B3C', text: '#4A4A4A', secondaryText: '#9B9B9B', background: '#F9F9F9', border: '#EAEAEA', headerBg: '#4A4A4A', headerText: '#FFFFFF' };
-            const restanteCor = restante >= 0 ? pdfColors.accent : pdfColors.danger;
-
-            const conteudo = `
-            <div style="font-family: 'Helvetica Neue', Arial, sans-serif; padding: 30px; max-width: 800px; margin: auto; background-color: #fff; color: ${pdfColors.text};">
-                <h1 style="color: ${pdfColors.primary}; text-align: center; margin-bottom: 25px; font-size: 26px; border-bottom: 2px solid ${pdfColors.border}; padding-bottom: 15px;">
-                    🛒 Lista de Compras ${currentSessionId ? `(${sessionName || 'Sala Compartilhada'})` : ''}
-                </h1>
-                <div style="background: ${pdfColors.background}; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
-                    <h2 style="color: ${pdfColors.text}; margin-top: 0; margin-bottom: 20px; font-size: 18px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Resumo Financeiro</h2>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: center;">
-                        <div><p style="margin: 0; font-size: 13px; color: ${pdfColors.secondaryText};">Orçamento</p><p style="margin: 5px 0 0; font-size: 20px; font-weight: bold; color: ${pdfColors.primary};">R$ ${formatCurrency(orcamento)}</p></div>
-                        <div><p style="margin: 0; font-size: 13px; color: ${pdfColors.secondaryText};">Gasto</p><p style="margin: 5px 0 0; font-size: 20px; font-weight: bold; color: ${pdfColors.text};">R$ ${formatCurrency(totalGasto)}</p></div>
-                        <div><p style="margin: 0; font-size: 13px; color: ${pdfColors.secondaryText};">Restante</p><p style="margin: 5px 0 0; font-size: 20px; font-weight: bold; color: ${restanteCor};">R$ ${formatCurrency(restante)}</p></div>
-                    </div>
-                </div>
-                <h2 style="color: ${pdfColors.text}; margin-bottom: 15px; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">Itens da Lista</h2>
-                <table style="width: 100%; border-collapse: collapse;">
-                    <thead><tr style="background: ${pdfColors.headerBg}; color: ${pdfColors.headerText};"><th style="padding: 12px 15px; text-align: left;">Produto</th><th style="padding: 12px 15px; text-align: center;">Qtd</th><th style="padding: 12px 15px; text-align: right;">Total</th></tr></thead>
-                    <tbody>
-                        ${listaCompras.map((produto, index) => `
-                            <tr style="background-color: ${index % 2 === 0 ? '#fff' : pdfColors.background}; border-bottom: 1px solid ${pdfColors.border};">
-                                <td style="padding: 12px 15px;">${produto.nome} ${currentSessionId ? `(por ${produto.addedBy})` : ''}</td>
-                                <td style="padding: 12px 15px; text-align: center;">${produto.quantidade}</td>
-                                <td style="padding: 12px 15px; text-align: right; font-weight: 600;">R$ ${formatCurrency(produto.total)}</td>
-                            </tr>`).join('')}
-                    </tbody>
-                    <tfoot><tr style="font-weight: bold; font-size: 16px;"><td colspan="2" style="padding: 15px; text-align: right; border-top: 2px solid ${pdfColors.text};">TOTAL GERAL:</td><td style="padding: 15px; text-align: right; color: ${pdfColors.text}; border-top: 2px solid ${pdfColors.text};">R$ ${formatCurrency(totalGasto)}</td></tr></tfoot>
-                </table>
-            </div>`;
-            
-            const opt = { margin: [0.5, 0.5, 0.5, 0.5], filename: `lista-compras.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
-            html2pdf().set(opt).from(conteudo).save();
-        }
-
-        function compartilharWhatsApp() {
-            const { orcamento, listaCompras, sessionName } = appData;
-            if (!listaCompras || listaCompras.length === 0) {
-                alert('Adicione produtos à lista para compartilhar.');
-                return;
-            }
-            const totalGasto = listaCompras.reduce((s, p) => s + p.total, 0);
-            const restante = orcamento - totalGasto;
-            
-            let mensagem = `🛒 *Lista de Compras${currentSessionId ? ` (${sessionName || 'Sala Compartilhada'})` : ''}*\n\n`;
-            mensagem += `💰 *Resumo Financeiro:*\n`;
-            mensagem += `• Orçamento: R$ ${formatCurrency(orcamento)}\n`;
-            mensagem += `• Gasto Total: R$ ${formatCurrency(totalGasto)}\n`;
-            mensagem += `• Restante: R$ ${formatCurrency(restante)}\n\n`;
-            mensagem += `📝 *Produtos:*\n`;
-            
-            listaCompras.forEach(produto => {
-                mensagem += `• ${produto.nome} (${produto.quantidade}x) - R$ ${formatCurrency(produto.total)}\n`;
-            });
-            
-            mensagem += `\n*Total Geral: R$ ${formatCurrency(totalGasto)}*`;
-            
-            const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
-            window.open(url, '_blank');
-        }
-        
-        // --- ATUALIZADO: Funções de Comparação de Preços ---
         async function compararPrecos() {
             const { listaCompras } = appData;
             if (!listaCompras || listaCompras.length === 0) {
@@ -672,120 +112,150 @@
             
             const modal = document.getElementById('price-comparison-modal');
             const loading = document.getElementById('comparison-loading');
-            const results = document.getElementById('comparison-results');
+            const resultsContainer = document.getElementById('comparison-results');
             
             modal.style.display = 'block';
             loading.style.display = 'block';
-            results.style.display = 'none';
-            
-            // Simula um delay de API
-            setTimeout(() => {
-                try {
-                    const simulatedData = generateSimulatedResults();
-                    displayComparisonResults(simulatedData);
-                } catch (error) {
-                    console.error('Erro ao simular comparação de preços:', error);
-                    results.innerHTML = '<p>Ocorreu um erro ao comparar os preços.</p>';
-                } finally {
-                    loading.style.display = 'none';
-                    results.style.display = 'block';
-                }
-            }, 2000); // 2 segundos de delay
-        }
+            resultsContainer.style.display = 'none';
+            resultsContainer.innerHTML = '';
 
-        function generateSimulatedResults() {
-            const { listaCompras } = appData;
-            const mercados = [
-                { nome: 'Extra Hipermercado', rede: 'Extra' },
-                { nome: 'Carrefour', rede: 'Carrefour' },
-                { nome: 'Pão de Açúcar', rede: 'Pão de Açúcar' },
-                { nome: 'Atacadão', rede: 'Atacadão' }
-            ];
-            
-            const mercadosRecomendados = mercados.map((mercado, index) => {
-                const cobertura = Math.random() * 0.4 + 0.6;
-                const itensEncontrados = Math.floor(listaCompras.length * cobertura);
-                const pontuacao = Math.random() * 0.3 + 0.7;
-                const valorTotal = listaCompras.reduce((sum, item) => sum + item.total, 0) * (0.8 + Math.random() * 0.3);
+            try {
+                // Para cada item, busca os preços na API
+                const promises = listaCompras.map(item => fetchPricesForItem(item.nome));
+                const results = await Promise.allSettled(promises);
                 
-                return {
-                    mercado: { nome: mercado.nome, endereco: `Rua Exemplo, ${100 + index * 50}, Recife` },
-                    pontuacao: pontuacao, itens_encontrados: itensEncontrados, total_itens: listaCompras.length,
-                    percentual_cobertura: cobertura, valor_total_estimado: valorTotal,
-                    produtos: listaCompras.map(item => ({
-                        nome: item.nome, preco: item.valor * (0.8 + Math.random() * 0.4),
-                        status: Math.random() > 0.2 ? 'encontrado' : (Math.random() > 0.5 ? 'estimado' : 'nao-encontrado')
-                    }))
-                };
-            });
-            
-            mercadosRecomendados.sort((a, b) => b.pontuacao - a.pontuacao);
-            
-            const economia = listaCompras.reduce((s, i) => s + i.total, 0) - mercadosRecomendados[0].valor_total_estimado;
+                // Analisa os resultados, calcula a recomendação e exibe tudo
+                analyzeAndDisplayResults(results, listaCompras);
 
-            return {
-                mercados_recomendados: mercadosRecomendados,
-                resumo: {
-                    total_produtos: listaCompras.length,
-                    melhor_opcao: mercadosRecomendados[0].mercado.nome,
-                    economia_maxima: economia > 0 ? economia : 0,
-                }
-            };
-        }
-
-        function displayComparisonResults(data) {
-            const resultsContainer = document.getElementById('comparison-results');
-            if (!data.mercados_recomendados || data.mercados_recomendados.length === 0) {
-                resultsContainer.innerHTML = `<p>Nenhum mercado encontrado para comparação.</p>`;
-                return;
+            } catch (error) {
+                console.error('Erro geral ao buscar preços:', error);
+                resultsContainer.innerHTML = `<p style="color:var(--danger-color);">Ocorreu um erro ao contatar a API.</p>`;
+            } finally {
+                loading.style.display = 'none';
+                resultsContainer.style.display = 'block';
             }
-            
-            let html = `
-                <div style="margin-bottom: 2rem; padding: 1rem; background: rgba(129, 140, 248, 0.1); border-radius: 12px; border: 1px solid var(--primary-color);">
-                    <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">📊 Resumo da Comparação</h3>
-                    <p><strong>Melhor opção:</strong> ${data.resumo.melhor_opcao}</p>
-                    <p><strong>Economia potencial:</strong> R$ ${formatCurrency(data.resumo.economia_maxima)}</p>
-                </div>
-            `;
-            
-            data.mercados_recomendados.forEach((mercado, index) => {
-                html += `
-                    <div class="market-card">
-                        <div class="market-header">
-                            <div>
-                                <div class="market-name">${mercado.mercado.nome}</div>
-                                <div style="font-size: 0.9rem; color: var(--text-secondary);">${mercado.mercado.endereco}</div>
-                            </div>
-                            <div class="market-score">${(mercado.pontuacao * 100).toFixed(0)}%</div>
-                        </div>
-                        <div class="market-stats">
-                            <div class="stat-item"><div class="stat-value">${(mercado.percentual_cobertura * 100).toFixed(0)}%</div><div class="stat-label">Cobertura</div></div>
-                            <div class="stat-item"><div class="stat-value">${mercado.itens_encontrados}/${mercado.total_itens}</div><div class="stat-label">Produtos</div></div>
-                            <div class="stat-item"><div class="stat-value">R$ ${formatCurrency(mercado.valor_total_estimado)}</div><div class="stat-label">Total Est.</div></div>
-                            <div class="stat-item"><div class="stat-value">#${index + 1}</div><div class="stat-label">Ranking</div></div>
-                        </div>
-                        <div class="product-list-comparison">
-                            <h4 style="margin-bottom: 0.75rem; color: var(--text-secondary); font-size: 0.9rem;">Produtos da sua lista:</h4>
-                            ${mercado.produtos.map(produto => `
-                                <div class="product-item-comparison">
-                                    <div>
-                                        <div style="font-weight: 500;">${produto.nome}</div>
-                                        ${produto.preco ? `<div style="font-size: 0.9rem; color: var(--text-secondary);">R$ ${formatCurrency(produto.preco)}</div>` : ''}
-                                    </div>
-                                    <div class="product-status status-${produto.status.replace('_', '-')}">
-                                        ${produto.status === 'encontrado' ? '✅ Encontrado' : produto.status === 'estimado' ? '📊 Estimado' : '❌ Não encontrado'}
-                                    </div>
-                                </div>`).join('')}
-                        </div>
-                    </div>`;
-            });
-            resultsContainer.innerHTML = html;
+        }
+        
+        /**
+         * Busca preços para um item na API do Open Prices
+         */
+        async function fetchPricesForItem(productName) {
+            // Busca os 10 preços mais recentes no Brasil para o nome do produto
+            const url = `https://prices.openfoodfacts.org/api/v1/prices?product_name=${encodeURIComponent(productName)}&country=br&size=10`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`API retornou o status ${response.status}`);
+            const data = await response.json();
+            return data.items;
         }
 
+        /**
+         * Analisa os resultados da API, gera uma recomendação e exibe tudo no modal.
+         * @param {Array} apiResults - O array com os resultados de Promise.allSettled.
+         * @param {Array} originalList - A lista de compras original.
+         */
+        function analyzeAndDisplayResults(apiResults, originalList) {
+            const resultsContainer = document.getElementById('comparison-results');
+            const storeWinCounts = {};
+            let productsWithPricesCount = 0;
+
+            // 1. Encontra o melhor preço para cada produto e conta as "vitórias" de cada loja
+            const bestPricesByProduct = apiResults.map((result, index) => {
+                const productName = originalList[index].nome;
+                if (result.status === 'fulfilled' && result.value.length > 0) {
+                    productsWithPricesCount++;
+                    // Encontra o item com o menor preço no array de resultados
+                    const bestPriceInfo = result.value.reduce((min, current) => current.price < min.price ? current : min);
+                    
+                    // Contabiliza a vitória da loja, se houver nome
+                    if (bestPriceInfo.store) {
+                        const storeName = bestPriceInfo.store.trim();
+                        storeWinCounts[storeName] = (storeWinCounts[storeName] || 0) + 1;
+                    }
+                    return { productName, allPrices: result.value, bestPrice: bestPriceInfo };
+                }
+                return { productName, allPrices: [], bestPrice: null }; // Caso não encontre preços
+            });
+
+            // 2. Determina a loja campeã e se ela atinge o critério de 50%
+            let topStore = null;
+            let topStoreWins = 0;
+            if (productsWithPricesCount > 0) {
+                // Encontra a loja com o maior número de vitórias
+                for (const store in storeWinCounts) {
+                    if (storeWinCounts[store] > topStoreWins) {
+                        topStoreWins = storeWinCounts[store];
+                        topStore = store;
+                    }
+                }
+            }
+
+            // 3. Gera o HTML do resumo (a recomendação)
+            let summaryHtml = '<div class="recommendation-summary">';
+            if (topStore && (topStoreWins / productsWithPricesCount) >= 0.5) {
+                summaryHtml += `
+                    <h3>🏆 Recomendação: Vá ao ${topStore}!</h3>
+                    <p>Ele apresentou o melhor preço para <strong>${topStoreWins}</strong> de <strong>${productsWithPricesCount}</strong> produtos encontrados.</p>
+                `;
+            } else if (productsWithPricesCount > 0) {
+                 summaryHtml += `
+                    <h3>🤔 Preços Variados</h3>
+                    <p>Nenhuma loja se destacou com a maioria dos melhores preços. Compare os itens abaixo.</p>
+                `;
+            } else {
+                 summaryHtml += `
+                    <h3>🤷‍♂️ Sem Dados Suficientes</h3>
+                    <p>Não foi possível encontrar preços na base de dados colaborativa para gerar uma recomendação.</p>
+                `;
+            }
+            summaryHtml += '</div>';
+
+            // 4. Gera o HTML detalhado para cada produto
+            let detailedHtml = bestPricesByProduct.map(productInfo => {
+                let productHtml = `<div class="product-comparison-card"><h3>${productInfo.productName}</h3>`;
+                
+                if (productInfo.allPrices.length > 0) {
+                    productHtml += productInfo.allPrices.map(priceInfo => {
+                        const isBestPrice = productInfo.bestPrice && priceInfo.id === productInfo.bestPrice.id;
+                        return `
+                            <div class="price-entry">
+                                <div class="price-details">
+                                    ${isBestPrice ? '<div class="best-price-tag">⭐ MELHOR PREÇO</div>' : ''}
+                                    <div class="location">${priceInfo.store || 'Local não informado'} - ${new Date(priceInfo.date).toLocaleDateString('pt-BR')}</div>
+                                </div>
+                                <div class="price-value">R$ ${formatCurrency(priceInfo.price)}</div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    productHtml += `<div class="price-entry"><p class="no-prices-found">Nenhum preço colaborativo encontrado.</p></div>`;
+                }
+                productHtml += '</div>';
+                return productHtml;
+            }).join('');
+            
+            // 5. Une tudo e exibe no modal
+            resultsContainer.innerHTML = summaryHtml + detailedHtml;
+        }
+
+		/**
+		* Função para formatar valores como moeda
+		*/
+		function formatCurrency(value) {
+			const numberValue = Number(value) || 0;
+			return numberValue.toFixed(2).replace('.', ',');
+		}
+
+        // Exponha as funções globais necessárias
         window.app = {
-            removerProduto: handleRemoverProduto,
-            selecionarProduto
+            ...window.app, // Mantém as funções existentes
+            compararPrecos
         };
+
+        // Certifique-se de que os listeners dos botões do modal estão configurados
+		document.getElementById('compare-btn').addEventListener('click', compararPrecos);
+		document.querySelector('.close-modal').addEventListener('click', () => document.getElementById('price-comparison-modal').style.display = 'none');
+		window.addEventListener('click', (event) => { if (event.target == document.getElementById('price-comparison-modal')) { document.getElementById('price-comparison-modal').style.display = 'none'; } });
+
     </script>
 </body>
 </html>
