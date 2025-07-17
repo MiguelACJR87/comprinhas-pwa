@@ -53,34 +53,15 @@
         .card h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
         header { margin-bottom: 2rem; }
         
-        /* ATUALIZAÇÃO DE DESIGN: Botões */
-        .btn {
-            padding: 0.8rem 1.6rem;
-            border: none;
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.6rem;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transform: translateY(0);
-        }
-        .btn:active:not(:disabled) {
-            transform: translateY(1px) scale(0.98);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
+        .btn { padding: 0.8rem 1.6rem; border: none; border-radius: 14px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s ease-in-out; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; text-decoration: none; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); transform: translateY(0); }
+        .btn:active:not(:disabled) { transform: translateY(1px) scale(0.98); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
         .btn:disabled { background-color: #374151; cursor: not-allowed; opacity: 0.6; }
         .btn-primary { background: linear-gradient(45deg, var(--primary-color), var(--primary-hover)); color: white; border: 1px solid rgba(255, 255, 255, 0.1); }
         .btn-whatsapp { background-color: var(--whatsapp-color); color: white; }
         .btn-secondary { background-color: var(--secondary-btn-color); color: var(--text-primary); }
         .btn-compare { background-color: var(--compare-color); color: var(--bg-color); }
         .btn-danger { background-color: var(--danger-color); color: white; }
-        .btn-icon { padding: 0.8rem; } /* Para botões que só têm ícone */
+        .btn-icon { padding: 0.8rem; }
 
         .input-group { margin-bottom: 1.5rem; }
         .input-group label { display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-weight: 500; font-size: 0.9rem; }
@@ -122,6 +103,33 @@
         .resumo-item .valor.gasto { color: var(--accent-color); }
         .resumo-item .valor.restante { color: var(--danger-color); }
         .resumo-item .valor.restante.positivo { color: var(--accent-color); }
+        
+        /* NOVO: Estilos do Modal de Comparação */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); }
+        .modal-content { background: var(--surface-color); margin: 10% auto; padding: 0; border: 1px solid var(--border-color); width: 90%; max-width: 800px; border-radius: 28px; animation: fadeIn 0.3s; }
+        .modal-header { padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { margin: 0; font-size: 1.5rem; }
+        .close-modal { color: var(--text-secondary); font-size: 2.5rem; font-weight: bold; cursor: pointer; line-height: 1; }
+        .close-modal:hover { color: var(--text-primary); }
+        .modal-body { padding: 1.5rem; max-height: 60vh; overflow-y: auto; }
+        .loading { text-align: center; padding: 2rem; }
+        .spinner { border: 4px solid var(--border-color); border-top: 4px solid var(--primary-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .market-card { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; }
+        .market-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .market-name { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); }
+        .market-score { background: var(--primary-color); color: var(--bg-color); padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
+        .market-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-color); }
+        .stat-label { font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .product-list-comparison { margin-top: 1rem; }
+        .product-item-comparison { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
+        .product-item-comparison:last-child { border-bottom: none; }
+        .product-status { padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+        .status-encontrado { background: rgba(52, 211, 153, 0.2); color: var(--accent-color); }
+        .status-estimado { background: rgba(245, 158, 11, 0.2); color: var(--compare-color); }
+        .status-nao-encontrado { background: rgba(251, 113, 133, 0.2); color: var(--danger-color); }
 
         @media (min-width: 640px) {
             .form-grid { grid-template-columns: 1fr 1fr; }
@@ -241,6 +249,23 @@
         </main>
     </div>
 
+    <!-- NOVO: Modal de Comparação de Preços -->
+    <div id="price-comparison-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔍 Comparação de Preços</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="loading" id="comparison-loading">
+                    <div class="spinner"></div>
+                    <p>Buscando os melhores preços na sua região...</p>
+                </div>
+                <div id="comparison-results" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -324,6 +349,10 @@
             document.getElementById('limpar-lista-btn').addEventListener('click', handleLimparLista);
             document.getElementById('pdf-btn').addEventListener('click', gerarPDF);
             document.getElementById('whatsapp-btn').addEventListener('click', compartilharWhatsApp);
+            // ATUALIZADO: Listener para o botão de comparar
+            document.getElementById('compare-btn').addEventListener('click', compararPrecos);
+            document.querySelector('.close-modal').addEventListener('click', () => document.getElementById('price-comparison-modal').style.display = 'none');
+            window.addEventListener('click', (event) => { if (event.target == document.getElementById('price-comparison-modal')) { document.getElementById('price-comparison-modal').style.display = 'none'; } });
         }
 
         function loadLocalData() {
@@ -537,7 +566,17 @@
             return numberValue.toFixed(2).replace('.', ',');
         }
 
-        const categorias = { 'Cereais': ['Arroz', 'Feijão'], 'Laticínios': ['Leite', 'Queijo'], 'Proteína': ['Frango', 'Ovos'], 'Hortifrúti': ['Banana', 'Tomate'], 'Padaria': ['Pão de Forma', 'Biscoito'], 'Outros': ['Açúcar', 'Sal', 'Óleo']};
+        const categorias = {
+            'Mercearia': ['Arroz', 'Feijão', 'Macarrão', 'Óleo', 'Azeite', 'Sal', 'Açúcar', 'Café', 'Farinha de Trigo', 'Fubá', 'Molho de Tomate'],
+            'Laticínios e Frios': ['Leite', 'Queijo', 'Iogurte', 'Manteiga', 'Requeijão', 'Creme de Leite', 'Leite Condensado', 'Presunto', 'Mortadela'],
+            'Carnes e Aves': ['Frango', 'Carne Bovina', 'Carne Suína', 'Linguiça', 'Peixe', 'Bacon'],
+            'Hortifrúti': ['Banana', 'Tomate', 'Alface', 'Cebola', 'Batata', 'Maçã', 'Laranja', 'Cenoura', 'Limão', 'Alho'],
+            'Padaria': ['Pão de Forma', 'Biscoito', 'Pão Francês', 'Bolo', 'Torrada', 'Pão de Queijo'],
+            'Bebidas': ['Refrigerante', 'Suco', 'Água Mineral', 'Cerveja', 'Vinho'],
+            'Limpeza': ['Detergente', 'Sabão em pó', 'Amaciante', 'Água Sanitária', 'Desinfetante', 'Esponja de aço', 'Saco de lixo'],
+            'Higiene Pessoal': ['Shampoo', 'Condicionador', 'Sabonete', 'Pasta de dente', 'Papel higiênico', 'Desodorante', 'Fio dental']
+        };
+        
         function populateCategories() {
             const container = document.getElementById('categorias-container');
             container.innerHTML = Object.entries(categorias).map(([cat, prods]) => `
@@ -623,6 +662,126 @@
             window.open(url, '_blank');
         }
         
+        // --- ATUALIZADO: Funções de Comparação de Preços ---
+        async function compararPrecos() {
+            const { listaCompras } = appData;
+            if (!listaCompras || listaCompras.length === 0) {
+                alert('Adicione produtos à lista antes de comparar preços.');
+                return;
+            }
+            
+            const modal = document.getElementById('price-comparison-modal');
+            const loading = document.getElementById('comparison-loading');
+            const results = document.getElementById('comparison-results');
+            
+            modal.style.display = 'block';
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            
+            // Simula um delay de API
+            setTimeout(() => {
+                try {
+                    const simulatedData = generateSimulatedResults();
+                    displayComparisonResults(simulatedData);
+                } catch (error) {
+                    console.error('Erro ao simular comparação de preços:', error);
+                    results.innerHTML = '<p>Ocorreu um erro ao comparar os preços.</p>';
+                } finally {
+                    loading.style.display = 'none';
+                    results.style.display = 'block';
+                }
+            }, 2000); // 2 segundos de delay
+        }
+
+        function generateSimulatedResults() {
+            const { listaCompras } = appData;
+            const mercados = [
+                { nome: 'Extra Hipermercado', rede: 'Extra' },
+                { nome: 'Carrefour', rede: 'Carrefour' },
+                { nome: 'Pão de Açúcar', rede: 'Pão de Açúcar' },
+                { nome: 'Atacadão', rede: 'Atacadão' }
+            ];
+            
+            const mercadosRecomendados = mercados.map((mercado, index) => {
+                const cobertura = Math.random() * 0.4 + 0.6;
+                const itensEncontrados = Math.floor(listaCompras.length * cobertura);
+                const pontuacao = Math.random() * 0.3 + 0.7;
+                const valorTotal = listaCompras.reduce((sum, item) => sum + item.total, 0) * (0.8 + Math.random() * 0.3);
+                
+                return {
+                    mercado: { nome: mercado.nome, endereco: `Rua Exemplo, ${100 + index * 50}, Recife` },
+                    pontuacao: pontuacao, itens_encontrados: itensEncontrados, total_itens: listaCompras.length,
+                    percentual_cobertura: cobertura, valor_total_estimado: valorTotal,
+                    produtos: listaCompras.map(item => ({
+                        nome: item.nome, preco: item.valor * (0.8 + Math.random() * 0.4),
+                        status: Math.random() > 0.2 ? 'encontrado' : (Math.random() > 0.5 ? 'estimado' : 'nao-encontrado')
+                    }))
+                };
+            });
+            
+            mercadosRecomendados.sort((a, b) => b.pontuacao - a.pontuacao);
+            
+            const economia = listaCompras.reduce((s, i) => s + i.total, 0) - mercadosRecomendados[0].valor_total_estimado;
+
+            return {
+                mercados_recomendados: mercadosRecomendados,
+                resumo: {
+                    total_produtos: listaCompras.length,
+                    melhor_opcao: mercadosRecomendados[0].mercado.nome,
+                    economia_maxima: economia > 0 ? economia : 0,
+                }
+            };
+        }
+
+        function displayComparisonResults(data) {
+            const resultsContainer = document.getElementById('comparison-results');
+            if (!data.mercados_recomendados || data.mercados_recomendados.length === 0) {
+                resultsContainer.innerHTML = `<p>Nenhum mercado encontrado para comparação.</p>`;
+                return;
+            }
+            
+            let html = `
+                <div style="margin-bottom: 2rem; padding: 1rem; background: rgba(129, 140, 248, 0.1); border-radius: 12px; border: 1px solid var(--primary-color);">
+                    <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">📊 Resumo da Comparação</h3>
+                    <p><strong>Melhor opção:</strong> ${data.resumo.melhor_opcao}</p>
+                    <p><strong>Economia potencial:</strong> R$ ${formatCurrency(data.resumo.economia_maxima)}</p>
+                </div>
+            `;
+            
+            data.mercados_recomendados.forEach((mercado, index) => {
+                html += `
+                    <div class="market-card">
+                        <div class="market-header">
+                            <div>
+                                <div class="market-name">${mercado.mercado.nome}</div>
+                                <div style="font-size: 0.9rem; color: var(--text-secondary);">${mercado.mercado.endereco}</div>
+                            </div>
+                            <div class="market-score">${(mercado.pontuacao * 100).toFixed(0)}%</div>
+                        </div>
+                        <div class="market-stats">
+                            <div class="stat-item"><div class="stat-value">${(mercado.percentual_cobertura * 100).toFixed(0)}%</div><div class="stat-label">Cobertura</div></div>
+                            <div class="stat-item"><div class="stat-value">${mercado.itens_encontrados}/${mercado.total_itens}</div><div class="stat-label">Produtos</div></div>
+                            <div class="stat-item"><div class="stat-value">R$ ${formatCurrency(mercado.valor_total_estimado)}</div><div class="stat-label">Total Est.</div></div>
+                            <div class="stat-item"><div class="stat-value">#${index + 1}</div><div class="stat-label">Ranking</div></div>
+                        </div>
+                        <div class="product-list-comparison">
+                            <h4 style="margin-bottom: 0.75rem; color: var(--text-secondary); font-size: 0.9rem;">Produtos da sua lista:</h4>
+                            ${mercado.produtos.map(produto => `
+                                <div class="product-item-comparison">
+                                    <div>
+                                        <div style="font-weight: 500;">${produto.nome}</div>
+                                        ${produto.preco ? `<div style="font-size: 0.9rem; color: var(--text-secondary);">R$ ${formatCurrency(produto.preco)}</div>` : ''}
+                                    </div>
+                                    <div class="product-status status-${produto.status.replace('_', '-')}">
+                                        ${produto.status === 'encontrado' ? '✅ Encontrado' : produto.status === 'estimado' ? '📊 Estimado' : '❌ Não encontrado'}
+                                    </div>
+                                </div>`).join('')}
+                        </div>
+                    </div>`;
+            });
+            resultsContainer.innerHTML = html;
+        }
+
         window.app = {
             removerProduto: handleRemoverProduto,
             selecionarProduto
